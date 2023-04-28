@@ -343,7 +343,15 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		],
 		priceRatio: 1.15,
 		effects: {
-			"unicornsRatioReligion" : 0.05
+			"unicornsRatioReligion" : 0.05,
+			"faithMax": 0
+		},
+		calculateEffects: function(self, game) {
+			if (game.challenges.getChallenge("unicorns").researched && !game.challenges.isActive("unicorns")) {
+				self.effects["faithMax"] = 100;
+			} else {
+				self.effects["faithMax"] = 0;
+			}
 		},
 		unlocked: true,
 		defaultUnlocked: true,
