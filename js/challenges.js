@@ -360,6 +360,29 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		unlocked: false,
 		checkCompletionCondition: function(game) {
 			return game.resPool.get("necrocorn").value >= 1;
+		},
+		//A list of buildings in the bonfire tab whose prices we won't add unicorn tears to:
+		//Any building that has a truthy value associated with it will be unaffected.
+		dontChangeThesePrices: {
+			"field": true,
+			"pasture": true,
+			"aqueduct": true,
+			"hut": true,
+			"library": true,
+			"barn": true,
+			"warehouse": true,
+			"smelter": true,
+			"amphitheatre": true,
+			"unicornPasture": true,
+			"ziggurat": true
+		},
+		/**
+		 * Decides whether or not to add some unicorn tears to the base price of a building.
+		 * @param bldName	String.  The name of a building in the bonfire tab.
+		 * @return	Boolean value.
+		 */
+		getShouldBldCostExtraTears: function(bldName) {
+			return !this.dontChangeThesePrices[bldName];
 		}
 	}],
 

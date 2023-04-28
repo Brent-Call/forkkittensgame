@@ -2184,6 +2184,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 	 	var bldPrices = bld.get("prices");
 		var bldName = bld.get("name");
 		var ratio = this.getPriceRatioWithAccessor(bld);
+		var bldRequiresTears = false;
 
 		var prices = [];
 
@@ -2198,6 +2199,9 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 				val: bldPrices[i].val * Math.pow(ratio, bld.get("val") + fakeBought) * priceModifier * resPriceModifier,
 				name: bldPrices[i].name
 			});
+			if (bldPrices[i].name == "tears") {
+				bldRequiresTears = true;
+			}
 		}
 
 		if (this.game.challenges.isActive("blackSky")
@@ -2227,15 +2231,21 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 						isTemporary: true //can't exploit buy manipulating pollution in postApocalypse
 					});
 		}
-		if (this.game.challenges.isActive("unicorns")) {
-			var baseTearsCost = 0; //We'll make some buildings cost additional unicorn tears.
-			
-			if (bldName == "logHouse" || bldName == "academy" || bldName == "lumberMill") {
+		if (this.game.challenges.isActive("unicorns") && !bldRequiresTears) {
+			//In the Unicorns Challenge, many buildings cost unicorn tears.  Ignore this effect for any building that already required tears.
+			var baseTearsCost = 0;
+
+			if (this.game.challenges.getChallenge("unicorns").getShouldBldCostExtraTears(bldName)) {
 				baseTearsCost = 2 + 1 * this.game.challenges.getChallenge("unicorns").on;
 			}
 
 			//For any building we altered, calculate a price for it:
 			if (baseTearsCost > 0) {
+				//For some important buildings, the first one costs 0 tears:
+				if ((bldName == "mine" || bldName == "workshop") && bld.get("val") == 0) {
+					baseTearsCost = 0;
+				}
+
 				var resPriceDiscount = this.game.getLimitedDR(this.game.getEffect("tearsCostReduction"), 1);
 				var resPriceModifier = 1 - resPriceDiscount;
 				prices.push({
