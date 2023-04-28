@@ -348,8 +348,10 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		},
 		calculateEffects: function(self, game) {
 			if (game.challenges.getChallenge("unicorns").researched && !game.challenges.isActive("unicorns")) {
-				self.effects["faithMax"] = 100;
+				self.effects["unicornsRatioReligion"] = 0.25;
+				self.effects["faithMax"] = 75 * game.challenges.getChallenge("unicorns").on;
 			} else {
+				self.effects["unicornsRatioReligion"] = 0.05;
 				self.effects["faithMax"] = 0;
 			}
 		},
