@@ -366,7 +366,6 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		dontChangeThesePrices: {
 			"field": true,
 			"pasture": true,
-			"aqueduct": true,
 			"hut": true,
 			"library": true,
 			"barn": true,
