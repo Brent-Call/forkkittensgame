@@ -1810,7 +1810,15 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		priceRatio: 1.75,
 		effects: {
 			"catnipDemandRatio": -0.0015,
-			"unicornsPerTickBase" : 0.001
+			"unicornsPerTickBase" : 0.001,
+			"unicornsMax": 0
+		},
+		calculateEffects: function(self, game) {
+			if (game.challenges.isActive("unicorns")) {
+				self.effects["unicornsMax"] = 10;
+			} else {
+				self.effects["unicornsMax"] = 0;
+			}
 		},
 		flavor: $I("buildings.unicornPasture.flavor")
 	},
@@ -1828,13 +1836,20 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		],
 		priceRatio: 1.25,
 		effects: {
-			"cultureMaxRatio": 0.08
+			"cultureMaxRatio": 0.08,
+			"unicornsMax": 0
 		},
 		calculateEffects: function(self, game) {
 			var effects = {
-				cultureMaxRatio: 0.08
+				cultureMaxRatio: 0.08,
+				unicornsMax: 0
 			};
 			effects["cultureMaxRatio"] = 0.08 + game.getEffect("cultureMaxRatioBonus");
+
+			if (game.challenges.isActive("unicorns")) {
+				effects["unicornsMax"] = 15;
+			}
+
 			self.effects = effects;
 			if(self.val){
 				game.time.queue.unlockQueueSource("zigguratUpgrades");
@@ -2167,13 +2182,14 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 	 getPricesWithAccessor: function(bld, additionalBought) {
 		additionalBought = additionalBought || 0;
 	 	var bldPrices = bld.get("prices");
+		var bldName = bld.get("name");
 		var ratio = this.getPriceRatioWithAccessor(bld);
 
 		var prices = [];
 
-		var pricesDiscount = this.game.getLimitedDR((this.game.getEffect(bld.get("name") + "CostReduction")), 1);
+		var pricesDiscount = this.game.getLimitedDR((this.game.getEffect(bldName + "CostReduction")), 1);
 		var priceModifier = 1 - pricesDiscount;
-		var fakeBought = this.game.getEffect(bld.get("name") + "FakeBought") + additionalBought;
+		var fakeBought = this.game.getEffect(bldName + "FakeBought") + additionalBought;
 
 		for (var i = 0; i < bldPrices.length; i++) {
 			var resPriceDiscount = this.game.getLimitedDR(this.game.getEffect(bldPrices[i].name + "CostReduction"), 1);
@@ -2185,7 +2201,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		}
 
 		if (this.game.challenges.isActive("blackSky")
-		 && bld.get("name") == "calciner"
+		 && bldName == "calciner"
 		 && bld.get("val") == 0) {
 			for (var i = 0; i < prices.length; i++) {
 				prices[i].val *= prices[i].name == "titanium" ? 0 : 11;
@@ -2193,7 +2209,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		}
 
 		if (this.game.challenges.isActive("pacifism")
-		 && bld.get("name") == "steamworks"
+		 && bldName == "steamworks"
 		 && bld.get("val") == 0) {
 			for (var i = 0; i < prices.length; i++) {
 				if (prices[i].name == "blueprint"){
@@ -2202,7 +2218,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			}
 		}
 		if (this.game.challenges.isActive("postApocalypse")
-		&& bld.get("name") == "field"
+		&& bldName == "field"
 		&& this.getPollutionLevel() >= 5
 		&& bld.get("val") >= Math.max(95 - this.game.time.getVSU("usedCryochambers").val - this.getPollutionLevel(), 7 + (this.game.ironWill? 8 : 0)) ) {
 			var builtWithUnobtanium = Math.max(bld.get("val") + this.game.time.getVSU("usedCryochambers").val - 100, 0);
@@ -2210,6 +2226,23 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 						name : "unobtainium",
 						isTemporary: true //can't exploit buy manipulating pollution in postApocalypse
 					});
+		}
+		if (this.game.challenges.isActive("unicorns")) {
+			var baseTearsCost = 0; //We'll make some buildings cost additional unicorn tears.
+			
+			if (bldName == "logHouse" || bldName == "academy" || bldName == "lumberMill") {
+				baseTearsCost = 2 + 1 * this.game.challenges.getChallenge("unicorns").on;
+			}
+
+			//For any building we altered, calculate a price for it:
+			if (baseTearsCost > 0) {
+				var resPriceDiscount = this.game.getLimitedDR(this.game.getEffect("tearsCostReduction"), 1);
+				var resPriceModifier = 1 - resPriceDiscount;
+				prices.push({
+					val: baseTearsCost * Math.pow(ratio, bld.get("val") + fakeBought) * priceModifier * resPriceModifier,
+					name: "tears"
+				});
+			}
 		}
 		return prices;
 	 },
