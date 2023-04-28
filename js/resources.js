@@ -840,6 +840,13 @@ dojo.declare("classes.managers.ResourceManager", com.nuclearunicorn.core.TabMana
 		if (res.name == "temporalFlux") {
 			return maxValue;
 		}
+		
+		//Unicorns Challenge:
+		if (this.game.challenges.isActive("unicorns")) {
+			if (res.name == "unicorns"  || res.name == "tears" || res.name == "alicorn") {
+				return maxValue;
+			}
+		}
 
 		maxValue *= 1 + this.game.prestige.getParagonStorageRatio();
 

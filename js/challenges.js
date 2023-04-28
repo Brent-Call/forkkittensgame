@@ -456,8 +456,8 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		
 		//Hack for the Unicorns Challenge.
 		if (this.isActive("unicorns")) {
-			this.effectsBase["unicornsMax"] = 100000;
-			this.effectsBase["tearsMax"] = 5000;
+			this.effectsBase["unicornsMax"] = 10;
+			this.effectsBase["tearsMax"] = 5;
 			this.effectsBase["alicornMax"] = 2;
 		} else {
 			this.effectsBase["unicornsMax"] = 0;
