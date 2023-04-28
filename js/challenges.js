@@ -381,6 +381,10 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		 * @return	Boolean value.
 		 */
 		getShouldBldCostExtraTears: function(bldName) {
+			if (bldName == "workshop") {
+				//Have workshops cost tears starting at the 2nd Unicorns Challenge.
+				return this.on >= 1;
+			}
 			return !this.dontChangeThesePrices[bldName];
 		}
 	}],
