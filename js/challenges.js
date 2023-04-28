@@ -351,7 +351,23 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 			game.science.getPolicy("terraformingInsight").unlocked = true; //policy which helpes to get more paragon this run
 			game.science.getPolicy("cryochamberExtraction").unlocked = true; //single use policy; gets not researched after player gets the bonus
 		}
-		}],
+	}, {
+		name: "unicorns",
+		label: $I("challendge.unicorns.label"),
+		description: $I("challendge.unicorns.desc"),
+		effectDesc: $I("challendge.unicorns.effect.desc"),
+		researched: false,
+		unlocked: false,
+		checkCompletionCondition: function(game) {
+			return game.resPool.get("necrocorn").value >= 1;
+		}
+	}],
+
+	effectsBase: {
+		"unicornsMax": 0,
+		"tearsMax": 0,
+		"alicornMax": 0
+	},
 
 	game: null,
 
@@ -437,6 +453,18 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 				this.researchChallenge(this.challenges[i].name);
 			}
 		}
+		
+		//Hack for the Unicorns Challenge.
+		if (this.isActive("unicorns")) {
+			this.effectsBase["unicornsMax"] = 100000;
+			this.effectsBase["tearsMax"] = 5000;
+			this.effectsBase["alicornMax"] = 2;
+		} else {
+			this.effectsBase["unicornsMax"] = 0;
+			this.effectsBase["tearsMax"] = 0;
+			this.effectsBase["alicornMax"] = 0;
+		}
+
 	},
 
 	getChallenge: function(name){
