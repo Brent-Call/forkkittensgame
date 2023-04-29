@@ -1823,7 +1823,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		},
 		calculateEffects: function(self, game) {
 			if (game.challenges.isActive("unicorns")) {
-				self.effects["unicornsMax"] = 30;
+				self.effects["unicornsMax"] = 50;
 			} else {
 				self.effects["unicornsMax"] = 0;
 			}
@@ -1855,7 +1855,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			effects["cultureMaxRatio"] = 0.08 + game.getEffect("cultureMaxRatioBonus");
 
 			if (game.challenges.isActive("unicorns")) {
-				effects["unicornsMax"] = 300;
+				effects["unicornsMax"] = 600;
 			}
 
 			self.effects = effects;
