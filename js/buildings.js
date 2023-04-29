@@ -1845,17 +1845,20 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		priceRatio: 1.25,
 		effects: {
 			"cultureMaxRatio": 0.08,
-			"unicornsMax": 0
+			"unicornsMax": 0,
+			"tearsMax": 0
 		},
 		calculateEffects: function(self, game) {
 			var effects = {
 				cultureMaxRatio: 0.08,
-				unicornsMax: 0
+				unicornsMax: 0,
+				tearsMax: 0
 			};
 			effects["cultureMaxRatio"] = 0.08 + game.getEffect("cultureMaxRatioBonus");
 
 			if (game.challenges.isActive("unicorns")) {
 				effects["unicornsMax"] = 600;
+				effects["tearsMax"] = 2;
 			}
 
 			self.effects = effects;
