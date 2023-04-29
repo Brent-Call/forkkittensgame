@@ -1855,7 +1855,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			effects["cultureMaxRatio"] = 0.08 + game.getEffect("cultureMaxRatioBonus");
 
 			if (game.challenges.isActive("unicorns")) {
-				effects["unicornsMax"] = 100;
+				effects["unicornsMax"] = 300;
 			}
 
 			self.effects = effects;
