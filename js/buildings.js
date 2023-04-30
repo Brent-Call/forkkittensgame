@@ -344,15 +344,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 				],
 				priceRatio: 1.15,
 				effects: {
-					"catnipDemandRatio": -0.005,
-					"unicornsMax": 0
-				},
-				calculateEffects: function(self, game) {
-					if (game.challenges.isActive("unicorns")) {
-						self.effects["unicornsMax"] = 1;
-					} else {
-						self.effects["unicornsMax"] = 0;
-					}
+					"catnipDemandRatio": -0.005
 				},
 				flavor: $I("buildings.pasture.flavor"),
 				stageUnlocked : true
