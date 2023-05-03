@@ -2244,8 +2244,9 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 
 			//For any building we altered, calculate a price for it:
 			if (baseTearsCost > 0) {
-				//For some important buildings, the first one costs 0 tears:
-				if ((bldName == "mine" || bldName == "workshop") && bld.get("val") == 0) {
+				//For some important buildings, the first one costs 0 tears.
+				var isSuperImportant = (bldName == "mine");
+				if (isSuperImportant && bld.get("val") == 0) {
 					baseTearsCost = 0;
 				}
 

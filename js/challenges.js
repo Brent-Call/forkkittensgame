@@ -368,10 +368,12 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 			"pasture": true,
 			"hut": true,
 			"library": true,
+			"observatory": true, //because the Challenge is already slow enough without good starchart income
 			"barn": true,
 			"warehouse": true,
 			"smelter": true,
 			"amphitheatre": true,
+			"workshop": true, //because we want players to actually have fun
 			"unicornPasture": true,
 			"ziggurat": true
 		},
@@ -381,10 +383,6 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		 * @return	Boolean value.
 		 */
 		getShouldBldCostExtraTears: function(bldName) {
-			if (bldName == "workshop") {
-				//Have workshops cost tears starting at the 2nd Unicorns Challenge.
-				return this.on >= 1;
-			}
 			return !this.dontChangeThesePrices[bldName];
 		}
 	}],
