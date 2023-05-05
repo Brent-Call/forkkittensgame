@@ -377,6 +377,11 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 			"unicornPasture": true,
 			"ziggurat": true
 		},
+		//A list of buildings in the bonfire tab where the first one costs 0 unicorn tears, but subsequent ones cost more tears.
+		isFirstOneFree: {
+			"mine": true,
+			"biolab": true
+		},
 		/**
 		 * Decides whether or not to add some unicorn tears to the base price of a building.
 		 * @param bldName	String.  The name of a building in the bonfire tab.
@@ -384,6 +389,15 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		 */
 		getShouldBldCostExtraTears: function(bldName) {
 			return !this.dontChangeThesePrices[bldName];
+		},
+		/**
+		 * For some buildings, they DO cost unicorn tears, but only if you've already built 1 of that building.
+		 * So the first one won't have its price changed.
+		 * @param bldName	String.  The name of a building in the bonfire tab.
+		 * @return	Boolean value.
+		 */
+		getIsFirstBldExempt: function(bldName) {
+			return this.isFirstOneFree[bldName];
 		}
 	}],
 
