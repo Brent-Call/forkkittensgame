@@ -372,6 +372,8 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 			"barn": true,
 			"warehouse": true,
 			"smelter": true,
+			"calciner": true,
+			"oilWell": true,
 			"amphitheatre": true,
 			"workshop": true, //because we want players to actually have fun
 			"unicornPasture": true,
