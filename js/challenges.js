@@ -365,16 +365,16 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		//Any building that has a truthy value associated with it will be unaffected.
 		dontChangeThesePrices: {
 			"field": true,
-			"pasture": true,
+			"pasture": true, //Also affects Solar Farms
 			"hut": true,
-			"library": true,
+			"library": true, //Also affects Data Centers
 			"observatory": true, //because the Challenge is already slow enough without good starchart income
 			"barn": true,
 			"warehouse": true,
 			"smelter": true,
 			"calciner": true,
 			"oilWell": true,
-			"amphitheatre": true,
+			"amphitheatre": true, //Also affects Broadcast Towers
 			"workshop": true, //because we want players to actually have fun
 			"unicornPasture": true,
 			"ziggurat": true
