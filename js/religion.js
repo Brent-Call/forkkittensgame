@@ -404,7 +404,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		calculateEffects: function(self, game) {
 			if (game.challenges.isActive("unicorns")) {
 				self.effects["unicornsMax"] = 100;
-				self.effects["tearsMax"] = 15;
+				self.effects["tearsMax"] = 16;
 			} else {
 				self.effects["unicornsMax"] = 0;
 				self.effects["tearsMax"] = 0;
