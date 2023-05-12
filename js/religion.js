@@ -1418,7 +1418,9 @@ dojo.declare("classes.ui.religion.TransformBtnController", com.nuclearunicorn.ga
 		var gainCount = this.controllerOpts.gainMultiplier.call(this) * amt;
 
 		this.game.resPool.addResEvent(model.prices[0].name, -priceCount);
-		this.game.resPool.addResEvent(this.controllerOpts.gainedResource, gainCount);
+
+		//Set gainCount to be the amount actually gained (e.g. in a Unicorns Challenge when tearsMax is relevant)
+		gainCount = this.game.resPool.addResEvent(this.controllerOpts.gainedResource, gainCount);
 
 		if (this.controllerOpts.applyAtGain) {
 			this.controllerOpts.applyAtGain.call(this, priceCount);
