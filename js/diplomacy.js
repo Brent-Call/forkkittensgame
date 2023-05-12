@@ -686,6 +686,10 @@ dojo.declare("classes.managers.DiplomacyManager", null, {
 				elders.energy = markerCap;
 			}
 
+			if (elders.energy >= 100 && this.game.prestige.getPerk("renaissance").researched) {
+				this.game.challenges.getChallenge("unicorns").unlocked = true;
+			}
+
 			ncorns.value -= amt;
 			this.game.msg($I("trade.msg.elders.pleased"), "notice");
 		} else {
