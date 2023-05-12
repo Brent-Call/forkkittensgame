@@ -431,6 +431,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			"alicornChance" : 0,
 			"alicornPerTick" : 0,
 			"ivoryMeteorRatio" : 0,
+			"unicornsMax": 0,
 			"zigguratMaxTears": 0
 		},
 		calculateEffects: function(self, game) {
@@ -440,12 +441,14 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				"alicornChance" : 0.0001,
 				"alicornPerTick" : 0,
 				"ivoryMeteorRatio" : 0.05,
+				"unicornsMax": 0,
 				"zigguratMaxTears": 0
 			};
 			if (game.resPool.get("alicorn").value > 0) {
 				effects["alicornPerTick"] = 0.00002;
 			}
 			if (game.challenges.isActive("unicorns")) {
+				effects["unicornsMax"] = 500;
 				effects["zigguratMaxTears"] = 3;
 			}
 			self.effects = effects;
