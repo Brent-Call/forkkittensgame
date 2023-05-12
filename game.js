@@ -954,6 +954,10 @@ dojo.declare("com.nuclearunicorn.game.EffectsManager", null, {
                 title: $I("effectsMgr.statics.alicornChance.title"),
                 type: "ratio"
             },
+			"zigguratMaxTears" : {
+				title: $I("effectsMgr.statics.zigguratMaxTears.title"),
+				type: "fixed"
+			},
 
 			"tcRefineRatio" :  {
                 title: $I("effectsMgr.statics.tcRefineRatio.title"),

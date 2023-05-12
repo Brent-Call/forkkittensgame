@@ -570,6 +570,7 @@
     "effectsMgr.statics.zebraAppeasedGoldPenalty.title" : "Gold penalty",
     "effectsMgr.statics.zebraPreparations.title": "Zebra Preparation",
     "effectsMgr.statics.zebraRelationModifier.title" : "Zebra relations modifier",
+    "effectsMgr.statics.zigguratMaxTears.title": "Ziggurat max tears",
     "effectsMgr.type.resConversion": "{0} conversion",
     "effectsMgr.type.resCraftRatio": "{0} craft effectiveness",
     "effectsMgr.type.resDemandRatio": "{0} demand reduction",

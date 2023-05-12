@@ -406,7 +406,8 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 	effectsBase: {
 		"unicornsMax": 0,
 		"tearsMax": 0,
-		"alicornMax": 0
+		"alicornMax": 0,
+		"zigguratMaxTears": 0
 	},
 
 	game: null,
@@ -495,14 +496,27 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		}
 		
 		//Hack for the Unicorns Challenge.
+		var effectsBase = this.effectsBase;
 		if (this.isActive("unicorns")) {
-			this.effectsBase["unicornsMax"] = 10;
-			this.effectsBase["tearsMax"] = 1;
-			this.effectsBase["alicornMax"] = 2;
+			effectsBase["unicornsMax"] = 10;
+			effectsBase["tearsMax"] = 1;
+			effectsBase["alicornMax"] = 2;
+
+			//Don't call game.upgrade every tick--only call it when we actually need to apply a change.
+			if (effectsBase["zigguratMaxTears"] != 2) {
+				effectsBase["zigguratMaxTears"] = 2;
+				this.game.upgrade({buildings: ["ziggurat"]});
+			}
 		} else {
-			this.effectsBase["unicornsMax"] = 0;
-			this.effectsBase["tearsMax"] = 0;
-			this.effectsBase["alicornMax"] = 0;
+			effectsBase["unicornsMax"] = 0;
+			effectsBase["tearsMax"] = 0;
+			effectsBase["alicornMax"] = 0;
+
+			//Don't call game.upgrade every tick--only call it when we actually need to apply a change.
+			if (effectsBase["zigguratMaxTears"] != 0) {
+				effectsBase["zigguratMaxTears"] = 0;
+				this.game.upgrade({buildings: ["ziggurat"]});
+			}
 		}
 
 	},

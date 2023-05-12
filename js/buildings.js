@@ -1850,7 +1850,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 
 			if (game.challenges.isActive("unicorns")) {
 				effects["unicornsMax"] = 600;
-				effects["tearsMax"] = 2;
+				effects["tearsMax"] = game.getEffect("zigguratMaxTears");
 			}
 
 			self.effects = effects;

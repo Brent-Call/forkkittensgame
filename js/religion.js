@@ -430,7 +430,8 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			"unicornsRatioReligion" : 0,
 			"alicornChance" : 0,
 			"alicornPerTick" : 0,
-			"ivoryMeteorRatio" : 0
+			"ivoryMeteorRatio" : 0,
+			"zigguratMaxTears": 0
 		},
 		calculateEffects: function(self, game) {
 			var effects = {
@@ -438,12 +439,19 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				"unicornsRatioReligion" : 0.5,
 				"alicornChance" : 0.0001,
 				"alicornPerTick" : 0,
-				"ivoryMeteorRatio" : 0.05
+				"ivoryMeteorRatio" : 0.05,
+				"zigguratMaxTears": 0
 			};
 			if (game.resPool.get("alicorn").value > 0) {
 				effects["alicornPerTick"] = 0.00002;
 			}
+			if (game.challenges.isActive("unicorns")) {
+				effects["zigguratMaxTears"] = 3;
+			}
 			self.effects = effects;
+		},
+		upgrades: {
+			buildings: ["ziggurat"]
 		},
 		unlocked: false,
 		defaultUnlocked: false,
