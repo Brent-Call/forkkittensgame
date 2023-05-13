@@ -1243,7 +1243,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				resFrom: model.prices[0].name,
 				resTo: this.controllerOpts.gainedResource,
 				valFrom: priceCount,
-				valTo: gainCount
+				valTo: actualGainCount
 			*/
 			var resConverted = resPool.get(data.resTo);
 			/*
@@ -1426,15 +1426,25 @@ dojo.declare("classes.ui.religion.TransformBtnController", com.nuclearunicorn.ga
 			return false;
 		}
 
-		var gainCount = this.controllerOpts.gainMultiplier.call(this) * amt;
+		var attemptedGainCount = this.controllerOpts.gainMultiplier.call(this) * amt;
 
 		this.game.resPool.addResEvent(model.prices[0].name, -priceCount);
 
-		//Set gainCount to be the amount actually gained (e.g. in a Unicorns Challenge when tearsMax is relevant)
-		gainCount = this.game.resPool.addResEvent(this.controllerOpts.gainedResource, gainCount);
+		//This is relevant e.g. in a Unicorns Challenge when sacrificing unicors near the limit of tearsMax.
+		var actualGainCount = this.game.resPool.addResEvent(this.controllerOpts.gainedResource, attemptedGainCount);
+		var overcap = attemptedGainCount - actualGainCount; //Amount of the resource we failed to gain because we hit the cap
 
 		if (this.controllerOpts.applyAtGain) {
 			this.controllerOpts.applyAtGain.call(this, priceCount);
+		}
+
+		if (overcap > 0) {
+			if (this.controllerOpts.overcapMsgID) { //Optional parameter--if truthy, display a message when we overcap
+				this.game.msg($I(this.controllerOpts.overcapMsgID, [this.game.getDisplayValueExt(overcap)]), "", this.controllerOpts.logfilterID, true /*noBullet*/);
+			}
+			if (this.controllerOpts.cathPollutionPerOvercap) { //Optional parameter--if truthy, overcapping affects pollution
+				this.game.bld.cathPollution += overcap * this.controllerOpts.cathPollutionPerOvercap;
+			}
 		}
 
 		var undo = this.game.registerUndoChange();
@@ -1443,10 +1453,10 @@ dojo.declare("classes.ui.religion.TransformBtnController", com.nuclearunicorn.ga
 			resFrom: model.prices[0].name,
 			resTo: this.controllerOpts.gainedResource,
 			valFrom: priceCount,
-			valTo: gainCount
+			valTo: actualGainCount
 		});
 
-		this.game.msg($I(this.controllerOpts.logTextID, [this.game.getDisplayValueExt(priceCount), this.game.getDisplayValueExt(gainCount)]), "", this.controllerOpts.logfilterID);
+		this.game.msg($I(this.controllerOpts.logTextID, [this.game.getDisplayValueExt(priceCount), this.game.getDisplayValueExt(actualGainCount)]), "", this.controllerOpts.logfilterID);
 
 		return true;
 	}
@@ -2075,6 +2085,8 @@ dojo.declare("com.nuclearunicorn.game.ui.tab.ReligionTab", com.nuclearunicorn.ga
 					applyAtGain: function(priceCount) {
 						this.game.stats.getStat("unicornsSacrificed").val += priceCount;
 					},
+					cathPollutionPerOvercap: 5, //In the Unicorns Challenge if we refine over the limit, some of it gets converted into pollution.
+					overcapMsgID: "religion.sacrificeBtn.sacrifice.msg.overcap",
 					logTextID: "religion.sacrificeBtn.sacrifice.msg",
 					logfilterID: "unicornSacrifice"
 				})
