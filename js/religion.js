@@ -1252,7 +1252,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				find out actual remaining value
 				and refund it proportionally, but I am to lazy to code it in 
 			*/
-			if (resConverted.value > data.valTo) {
+			if (resConverted.value >= data.valTo) {
 				this.game.resPool.addResEvent(data.resFrom, data.valFrom);
 				this.game.resPool.addResEvent(data.resTo, -data.valTo);
 			}
