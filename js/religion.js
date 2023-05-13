@@ -1438,7 +1438,7 @@ dojo.declare("classes.ui.religion.TransformBtnController", com.nuclearunicorn.ga
 			this.controllerOpts.applyAtGain.call(this, priceCount);
 		}
 
-		if (overcap > 0) {
+		if (overcap > 0.001) { //Don't trigger from floating-point errors
 			if (this.controllerOpts.overcapMsgID) { //Optional parameter--if truthy, display a message when we overcap
 				this.game.msg($I(this.controllerOpts.overcapMsgID, [this.game.getDisplayValueExt(overcap)]), "", this.controllerOpts.logfilterID, true /*noBullet*/);
 			}
@@ -1448,7 +1448,7 @@ dojo.declare("classes.ui.religion.TransformBtnController", com.nuclearunicorn.ga
 		}
 
 		var undo = this.game.registerUndoChange();
-        undo.addEvent("religion", {
+		undo.addEvent("religion", {
 			action:"refine",
 			resFrom: model.prices[0].name,
 			resTo: this.controllerOpts.gainedResource,
