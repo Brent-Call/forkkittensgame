@@ -449,7 +449,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			}
 			if (game.challenges.isActive("unicorns")) {
 				effects["unicornsMax"] = 500;
-				effects["zigguratMaxTears"] = 3;
+				effects["zigguratMaxTears"] = 4;
 			}
 			self.effects = effects;
 		},
