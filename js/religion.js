@@ -344,16 +344,21 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		priceRatio: 1.15,
 		effects: {
 			"unicornsRatioReligion" : 0.05,
-			"faithMax": 0
+			"faithMax": 0,
+			"tearsMax": 0
 		},
 		calculateEffects: function(self, game) {
+			var effects = {
+				"unicornsRatioReligion" : 0.05,
+				"faithMax": 0,
+				"tearsMax": 0
+			};
 			if (game.challenges.getChallenge("unicorns").researched && !game.challenges.isActive("unicorns")) {
-				self.effects["unicornsRatioReligion"] = 0.25;
-				self.effects["faithMax"] = 75 * game.challenges.getChallenge("unicorns").on;
+				effects["faithMax"] = 75 * game.challenges.getChallenge("unicorns").on;
 			} else {
-				self.effects["unicornsRatioReligion"] = 0.05;
-				self.effects["faithMax"] = 0;
+				effects["tearsMax"] = game.getEffect("unicornTombMaxTears");
 			}
+			self.effects = effects;
 		},
 		unlocked: true,
 		defaultUnlocked: true,
@@ -476,7 +481,9 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			"alicornChance" : 0,
 			"alicornPerTick" : 0,
 			"tcRefineRatio" : 0,
-			"ivoryMeteorRatio" : 0
+			"ivoryMeteorRatio" : 0,
+			"unicornsMax": 0,
+			"unicornTombMaxTears": 0
 		},
 		calculateEffects: function(self, game) {
 			var effects = {
@@ -484,17 +491,27 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				"alicornChance" : 0.00015,
 				"alicornPerTick" : 0,
 				"tcRefineRatio" : 0.05,
-				"ivoryMeteorRatio" : 0.15
+				"ivoryMeteorRatio" : 0.15,
+				"unicornsMax": 0,
+				"unicornTombMaxTears": 0
 			};
 			if (game.resPool.get("alicorn").value > 0) {
 				effects["alicornPerTick"] = 0.000025;
 			}
+			if (game.challenges.isActive("unicorns")) {
+				effects["unicornsMax"] = 2000;
+				effects["unicornTombMaxTears"] = 8;
+			}
 			self.effects = effects;
+			game.upgrade(this.upgrades); //This is a HACK
 		},
 		unlocked: false,
 		defaultUnlocked: false,
 		unlocks: {
 			"zigguratUpgrades": ["sunspire"]
+		},
+		upgrades: {
+			"zigguratUpgrades": ["unicornTomb"]
 		},
 		unlockScheme: {
 			name: "unicorn",
