@@ -843,7 +843,7 @@ dojo.declare("classes.managers.ResourceManager", com.nuclearunicorn.core.TabMana
 		
 		//Unicorns Challenge:
 		if (this.game.challenges.isActive("unicorns")) {
-			if (res.name == "unicorns"  || res.name == "tears" || res.name == "alicorn") {
+			if (res.name == "unicorns"  || res.name == "tears") {
 				maxValue *= 1 + this.game.getEffect(res.name + "MaxRatio");
 				return maxValue;
 			}
