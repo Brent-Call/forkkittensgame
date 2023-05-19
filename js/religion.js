@@ -500,7 +500,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			}
 			if (game.challenges.isActive("unicorns")) {
 				effects["unicornsMax"] = 2000;
-				effects["unicornTombMaxTears"] = 8;
+				effects["unicornTombMaxTears"] = 10;
 			}
 			self.effects = effects;
 			game.upgrade(this.upgrades); //This is a HACK
