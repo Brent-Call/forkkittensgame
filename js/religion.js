@@ -500,7 +500,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			}
 			if (game.challenges.isActive("unicorns")) {
 				effects["unicornsMax"] = 2000;
-				effects["unicornTombMaxTears"] = 10;
+				effects["unicornTombMaxTears"] = 22;
 			}
 			self.effects = effects;
 			game.upgrade(this.upgrades); //This is a HACK
@@ -534,7 +534,9 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			"alicornChance" : 0,
 			"alicornPerTick" : 0,
 			"tcRefineRatio": 0,
-			"ivoryMeteorRatio" : 0
+			"ivoryMeteorRatio" : 0,
+			"unicornsMaxRatio": 0,
+			"tearsMax": 0
 		},
 		calculateEffects: function(self, game) {
 			var effects = {
@@ -542,10 +544,16 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				"alicornChance" : 0.0003,
 				"alicornPerTick" : 0,
 				"tcRefineRatio" : 0.1,
-				"ivoryMeteorRatio" : 0.5
+				"ivoryMeteorRatio" : 0.5,
+				"unicornsMaxRatio": 0,
+				"tearsMax": 0
 			};
 			if (game.resPool.get("alicorn").value > 0) {
 				effects["alicornPerTick"] = 0.00005;
+			}
+			if (game.challenges.isActive("unicorns")) {
+				effects["unicornsMaxRatio"] = 0.1;
+				effects["tearsMax"] = 2850;
 			}
 			self.effects = effects;
 		},
