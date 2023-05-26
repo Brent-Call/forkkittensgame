@@ -686,7 +686,7 @@ dojo.declare("classes.managers.DiplomacyManager", null, {
 				elders.energy = markerCap;
 			}
 
-			if (elders.energy >= 100 && this.game.prestige.getPerk("renaissance").researched) {
+			if (this.game.prestige.getPerk("renaissance").researched) {
 				var unicornsChallenge = this.game.challenges.getChallenge("unicorns");
 				if (!unicornsChallenge.unlocked) {
 					unicornsChallenge.unlocked = true;
