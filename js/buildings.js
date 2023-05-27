@@ -2259,7 +2259,8 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 				var resPriceModifier = 1 - resPriceDiscount;
 				prices.push({
 					val: baseTearsCost * Math.pow(ratio, bld.get("val") + fakeBought) * priceModifier * resPriceModifier,
-					name: "tears"
+					name: "tears",
+					isTemporary: true //Can't exploit selling all your buildings before completing the Challenge to get tears back
 				});
 			}
 		}
