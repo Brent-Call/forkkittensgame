@@ -388,7 +388,9 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		//A list of buildings in the bonfire tab where the first one costs 0 unicorn tears, but subsequent ones cost more tears.
 		isFirstOneFree: {
 			"mine": true,
-			"biolab": true
+			"biolab": true,
+			"temple": true,
+			"tradepost": true
 		},
 		/**
 		 * Decides whether or not to add some unicorn tears to the base price of a building.
