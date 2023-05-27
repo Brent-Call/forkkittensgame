@@ -1576,6 +1576,10 @@ dojo.declare("com.nuclearunicorn.game.EffectsManager", null, {
 				title: $I("effectsMgr.statics.weaponEfficency.title"),
 				type: "ratio"
 			},
+			"markerCostIncrease": {
+				title: $I("effectsMgr.statics.markerCostIncrease.title"),
+				type: "ratio"
+			},
 			"cryochamberSupport":{
 				title: $I("effectsMgr.statics.cryochamberSupport.title"),
 			},

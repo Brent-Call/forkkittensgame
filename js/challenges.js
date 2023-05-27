@@ -358,6 +358,12 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		effectDesc: $I("challendge.unicornTears.effect.desc"),
 		researched: false,
 		unlocked: false,
+		effects: {
+			"markerCostIncrease": 0.75
+		},
+		stackOptions: {
+			"markerCostIncrease": { LDRLimit: 9 }
+		},
 		checkCompletionCondition: function(game) {
 			return game.resPool.get("necrocorn").value >= 1;
 		},
