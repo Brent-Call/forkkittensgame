@@ -359,7 +359,14 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		researched: false,
 		unlocked: false,
 		effects: {
-			"markerCostIncrease": 0.75
+			"markerCostIncrease": 0
+		},
+		calculateEffects: function(self, game) {
+			if (self.active) {
+				self.effects["markerCostIncrease"] = 0.75;
+			} else {
+				self.effects["markerCostIncrease"] = 0;
+			}
 		},
 		stackOptions: {
 			"markerCostIncrease": { LDRLimit: 9 }
