@@ -1820,7 +1820,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			"unicornsMax": 0
 		},
 		calculateEffects: function(self, game) {
-			if (game.challenges.isActive("unicorns")) {
+			if (game.challenges.isActive("unicornTears")) {
 				self.effects["unicornsMax"] = 50;
 			} else {
 				self.effects["unicornsMax"] = 0;
@@ -1854,7 +1854,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			};
 			effects["cultureMaxRatio"] = 0.08 + game.getEffect("cultureMaxRatioBonus");
 
-			if (game.challenges.isActive("unicorns")) {
+			if (game.challenges.isActive("unicornTears")) {
 				effects["unicornsMax"] = 600;
 				effects["tearsMax"] = game.getEffect("zigguratMaxTears");
 			}
@@ -2240,18 +2240,18 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 						isTemporary: true //can't exploit buy manipulating pollution in postApocalypse
 					});
 		}
-		//In the Unicorns Challenge, add unicorn tears to the cost of buildings, unless that building already costs tears.
-		if (this.game.challenges.isActive("unicorns") && !bldRequiresTears) {
-			var unicornsChallenge = this.game.challenges.getChallenge("unicorns");
+		//In the Unicorn Tears Challenge, add unicorn tears to the cost of buildings, unless that building already costs tears.
+		if (this.game.challenges.isActive("unicornTears") && !bldRequiresTears) {
+			var unicornTearsChallenge = this.game.challenges.getChallenge("unicornTears");
 			var baseTearsCost = 0;
 
-			if (unicornsChallenge.getShouldBldCostExtraTears(bldName)) {
-				baseTearsCost = 2 + 1 * this.game.challenges.getChallenge("unicorns").on;
+			if (unicornTearsChallenge.getShouldBldCostExtraTears(bldName)) {
+				baseTearsCost = 2 + 1 * this.game.challenges.getChallenge("unicornTears").on;
 			}
 
 			//For any building we altered, calculate a price for it:
 			if (baseTearsCost > 0) {
-				if (unicornsChallenge.getIsFirstBldExempt(bldName) && bld.get("val") == 0) {
+				if (unicornTearsChallenge.getIsFirstBldExempt(bldName) && bld.get("val") == 0) {
 					baseTearsCost = 0; //Building is so important that the first one costs 0 tears.
 				}
 

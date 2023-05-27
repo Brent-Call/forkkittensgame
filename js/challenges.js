@@ -352,10 +352,10 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 			game.science.getPolicy("cryochamberExtraction").unlocked = true; //single use policy; gets not researched after player gets the bonus
 		}
 	}, {
-		name: "unicorns",
-		label: $I("challendge.unicorns.label"),
-		description: $I("challendge.unicorns.desc"),
-		effectDesc: $I("challendge.unicorns.effect.desc"),
+		name: "unicornTears",
+		label: $I("challendge.unicornTears.label"),
+		description: $I("challendge.unicornTears.desc"),
+		effectDesc: $I("challendge.unicornTears.effect.desc"),
 		researched: false,
 		unlocked: false,
 		checkCompletionCondition: function(game) {
@@ -498,9 +498,9 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 			}
 		}
 		
-		//Hack for the Unicorns Challenge.
+		//Hack for the Unicorn Tears Challenge.
 		var effectsBase = this.effectsBase;
-		if (this.isActive("unicorns")) {
+		if (this.isActive("unicornTears")) {
 			effectsBase["unicornsMax"] = 10;
 			effectsBase["tearsMax"] = 1;
 

@@ -1573,7 +1573,7 @@ dojo.declare("classes.managers.WorkshopManager", com.nuclearunicorn.core.TabMana
 			"unicornsMaxRatio": 0
 		},
 		calculateEffects: function(self, game) {
-			if (game.challenges.isActive("unicorns")) {
+			if (game.challenges.isActive("unicornTears")) {
 				self.effects["unicornsMaxRatio"] = 0.5;
 			} else {
 				self.effects["unicornsMaxRatio"] = 0;

@@ -353,8 +353,8 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				"faithMax": 0,
 				"tearsMax": 0
 			};
-			if (game.challenges.getChallenge("unicorns").researched && !game.challenges.isActive("unicorns")) {
-				effects["faithMax"] = 75 * game.challenges.getChallenge("unicorns").on;
+			if (game.challenges.getChallenge("unicornTears").researched && !game.challenges.isActive("unicornTears")) {
+				effects["faithMax"] = 75 * game.challenges.getChallenge("unicornTears").on;
 			} else {
 				effects["tearsMax"] = game.getEffect("unicornTombMaxTears");
 			}
@@ -380,7 +380,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			"tearsMax": 0
 		},
 		calculateEffects: function(self, game) {
-			if (game.challenges.isActive("unicorns")) {
+			if (game.challenges.isActive("unicornTears")) {
 				self.effects["tearsMax"] = 2;
 			} else {
 				self.effects["tearsMax"] = 0;
@@ -407,7 +407,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			"tearsMax": 0
 		},
 		calculateEffects: function(self, game) {
-			if (game.challenges.isActive("unicorns")) {
+			if (game.challenges.isActive("unicornTears")) {
 				self.effects["unicornsMax"] = 100;
 				self.effects["tearsMax"] = 20;
 			} else {
@@ -452,7 +452,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			if (game.resPool.get("alicorn").value > 0) {
 				effects["alicornPerTick"] = 0.00002;
 			}
-			if (game.challenges.isActive("unicorns")) {
+			if (game.challenges.isActive("unicornTears")) {
 				effects["unicornsMax"] = 500;
 				effects["zigguratMaxTears"] = 4;
 			}
@@ -498,7 +498,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			if (game.resPool.get("alicorn").value > 0) {
 				effects["alicornPerTick"] = 0.000025;
 			}
-			if (game.challenges.isActive("unicorns")) {
+			if (game.challenges.isActive("unicornTears")) {
 				effects["unicornsMax"] = 2000;
 				effects["unicornTombMaxTears"] = 22;
 			}
@@ -551,7 +551,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			if (game.resPool.get("alicorn").value > 0) {
 				effects["alicornPerTick"] = 0.00005;
 			}
-			if (game.challenges.isActive("unicorns")) {
+			if (game.challenges.isActive("unicornTears")) {
 				effects["unicornsMaxRatio"] = 0.1;
 				effects["tearsMax"] = 2850;
 			}
@@ -1455,7 +1455,7 @@ dojo.declare("classes.ui.religion.TransformBtnController", com.nuclearunicorn.ga
 
 		this.game.resPool.addResEvent(model.prices[0].name, -priceCount);
 
-		//This is relevant e.g. in a Unicorns Challenge when sacrificing unicors near the limit of tearsMax.
+		//This is relevant e.g. in a Unicorn Tears Challenge when sacrificing unicorns near the limit of tearsMax.
 		var actualGainCount = this.game.resPool.addResEvent(this.controllerOpts.gainedResource, attemptedGainCount);
 		var overcap = attemptedGainCount - actualGainCount; //Amount of the resource we failed to gain because we hit the cap
 
@@ -2110,7 +2110,7 @@ dojo.declare("com.nuclearunicorn.game.ui.tab.ReligionTab", com.nuclearunicorn.ga
 					applyAtGain: function(priceCount) {
 						this.game.stats.getStat("unicornsSacrificed").val += priceCount;
 					},
-					cathPollutionPerOvercap: 5, //In the Unicorns Challenge if we refine over the limit, some of it gets converted into pollution.
+					cathPollutionPerOvercap: 5, //In the Unicorn Tears Challenge if we refine over the limit, some of it gets converted into pollution.
 					overcapMsgID: "religion.sacrificeBtn.sacrifice.msg.overcap",
 					logTextID: "religion.sacrificeBtn.sacrifice.msg",
 					logfilterID: "unicornSacrifice"
