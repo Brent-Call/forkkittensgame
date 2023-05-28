@@ -359,20 +359,31 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		researched: false,
 		unlocked: false,
 		effects: {
+			"zigguratIvoryPriceRatio": -0.05,
+			"unicornTombBaseMaxFaith": 40,
 			"markerCostIncrease": 0
 		},
 		calculateEffects: function(self, game) {
 			if (self.active) {
 				self.effects["markerCostIncrease"] = 0.75;
+				self.effects["unicornTombBaseMaxFaith"] = 0;
+				self.effects["zigguratIvoryPriceRatio"] = 0;
 			} else {
 				self.effects["markerCostIncrease"] = 0;
+				self.effects["zigguratIvoryPriceRatio"] = -0.05;
+				self.effects["unicornTombBaseMaxFaith"] = 40;
 			}
+			game.upgrade(self.upgrades); //HACK
 		},
 		stackOptions: {
+			"zigguratIvoryPriceRatio": { capMagnitude: 0.14 },
 			"markerCostIncrease": { LDRLimit: 9 }
 		},
 		checkCompletionCondition: function(game) {
 			return game.resPool.get("necrocorn").value >= 1;
+		},
+		upgrades: {
+			zigguratUpgrades: ["unicornTomb"] //HACK
 		},
 		//A list of buildings in the bonfire tab whose prices we won't add unicorn tears to:
 		//Any building that has a truthy value associated with it will be unaffected.
