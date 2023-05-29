@@ -187,7 +187,9 @@ dojo.declare("classes.managers.TimeManager", com.nuclearunicorn.core.TabManager,
         this.game.village.fastforward(daysOffset);
         this.game.space.fastforward(daysOffset);
         this.game.religion.fastforward(daysOffset);
-        this.game.religion.autoSacrificeUnicorns();
+        if (this.game.calendar.day - daysOffset < 0) { //If we would cross a season's boundary
+            this.game.religion.autoSacrificeUnicorns();
+        }
 
         this.game.resPool.enforceLimits(resourceLimits);
 
