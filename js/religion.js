@@ -422,7 +422,8 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		unlocked: true,
 		defaultUnlocked: true,
 		unlocks: {
-			"zigguratUpgrades": ["ivoryTower"]
+			"zigguratUpgrades": ["ivoryTower"],
+			policies: ["ritualCalendar", "religiousArchitecture", "holyGround"]
 		}
 	},{
 		name: "ivoryTower",

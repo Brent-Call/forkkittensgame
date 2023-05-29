@@ -1425,7 +1425,10 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		},
 		unlocked: false,
 		blocked: false,
-		blocks: [ "religiousArchitecture", "holyGround" ]
+		blocks: [ "religiousArchitecture", "holyGround" ],
+		evaluateLocks: function(game) {
+			return game.challenges.getChallenge("unicornTears").active && game.religion.getZU("unicornTomb").val > 0;
+		}
 	}, {
 		name: "religiousArchitecture",
 		label: $I("policy.religiousArchitecture.label"),
@@ -1436,7 +1439,11 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		],
 		unlocked: false,
 		blocked: false,
-		blocks: [ "ritualCalendar", "holyGround" ]
+		blocks: [ "ritualCalendar", "holyGround" ],
+		evaluateLocks: function(game) {
+			//Requires you to have at least 1 paragon of either regular or burned variety
+			return game.challenges.getChallenge("unicornTears").active && game.religion.getZU("unicornTomb").val > 0 && game.prestige.getParagonStorageRatio() > 0;
+		}
 	}, {
 		name: "holyGround",
 		label: $I("policy.holyGround.label"),
@@ -1455,7 +1462,10 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		},
 		unlocked: false,
 		blocked: false,
-		blocks: [ "ritualCalendar", "religiousArchitecture" ]
+		blocks: [ "ritualCalendar", "religiousArchitecture" ],
+		evaluateLocks: function(game) {
+			return game.challenges.getChallenge("unicornTears").active && game.religion.getZU("unicornTomb").val > 0;
+		}
 	},
     //----------------   Environmental Policy   --------------------
     {
