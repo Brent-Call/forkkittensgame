@@ -1422,11 +1422,11 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		],
 		unlocked: false,
 		blocked: false,
-		blocks: [ "standardization", "holyGround" ]
+		blocks: [ "religiousArchitecture", "holyGround" ]
 	}, {
-		name: "standardization",
-		label: $I("policy.standardization.label"),
-		description: $I("policy.standardization.desc"),
+		name: "religiousArchitecture",
+		label: $I("policy.religiousArchitecture.label"),
+		description: $I("policy.religiousArchitecture.desc"),
 		prices: [
 			{name: "science", val: 5000},
 			{name: "culture", val: 4250}
@@ -1452,7 +1452,7 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		},
 		unlocked: false,
 		blocked: false,
-		blocks: [ "ritualCalendar", "standardization" ]
+		blocks: [ "ritualCalendar", "religiousArchitecture" ]
 	},
     //----------------   Environmental Policy   --------------------
     {
