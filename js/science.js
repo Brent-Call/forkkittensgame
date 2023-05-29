@@ -1412,7 +1412,48 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
         unlocked: false,
         blocked: false,
         blocks:["rationality"]
-    },
+    }, {
+		name: "ritualCalendar",
+		label: $I("policy.ritualCalendar.label"),
+		description: $I("policy.ritualCalendar.desc"),
+		prices: [
+			{name: "spice", val: 5000},
+			{name: "culture", val: 4250}
+		],
+		unlocked: false,
+		blocked: false,
+		blocks: [ "standardization", "holyGround" ]
+	}, {
+		name: "standardization",
+		label: $I("policy.standardization.label"),
+		description: $I("policy.standardization.desc"),
+		prices: [
+			{name: "science", val: 5000},
+			{name: "culture", val: 4250}
+		],
+		unlocked: false,
+		blocked: false,
+		blocks: [ "ritualCalendar", "holyGround" ]
+	}, {
+		name: "holyGround",
+		label: $I("policy.holyGround.label"),
+		description: $I("policy.holyGround.desc"),
+		prices: [
+			{name: "megalith", val: 5000},
+			{name: "culture", val: 4250}
+		],
+		onResearch: function(game) {
+			var ziggurats = game.bld.get("ziggurat");
+			ziggurats.on += 5;
+			ziggurats.val += 5;
+			game.upgrade({ buildings: ["ziggurat"]});
+			//Repurpose an existing console log message:
+			game.msg($I("construct.all.msg", [ziggurats.label, 5]));
+		},
+		unlocked: false,
+		blocked: false,
+		blocks: [ "ritualCalendar", "standardization" ]
+	},
     //----------------   Environmental Policy   --------------------
     {
         name: "stripMining",
