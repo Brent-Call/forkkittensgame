@@ -344,11 +344,16 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			return; //Required policy is not researched.
 		}
 		var sacrificeThreshold = this.game.getEffect("autoSacrificeUnicornsThreshold"); //What percentage of max unicorns we need to get to before we will auto-sacrifice.
+		if (sacrificeThreshold < 0) {
+			sacrificeThreshold = 0;
+		}
+		if (sacrificeThreshold > 1) {
+			sacrificeThreshold = 1;
+		}
 		var UNICORNS_PER_SACRIFICE = 2500; //How many unicorns are sacrificed at once.
-		var MIN_AMOUNT_TO_TRIGGER_SACRIFICE = 2500 / sacrificeThreshold;
 		var unicorns = this.game.resPool.get("unicorns");
-		if (unicorns.maxValue < MIN_AMOUNT_TO_TRIGGER_SACRIFICE ) {
-			return; //Not enough max unicorns to ever get to threshold & trigger an auto-sacrifice.
+		if (unicorns.maxValue < UNICORNS_PER_SACRIFICE ) {
+			return; //Not enough max unicorns to ever be able to sacrifice.
 		}
 		if (unicorns.value < unicorns.maxValue * sacrificeThreshold) {
 			return; //Not enough actual unicorns to trigger an auto-sacrifice.
@@ -363,8 +368,9 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		var tearsToCap = Math.max(0, tears.maxValue - tears.value);
 		var sacrificesToCap = Math.ceil(tearsToCap / tearsPerSacrifice);
 
-		//Stop sacrificing unicorns when we reach the cap on unicorn tears:
-		sacrificesToPerform = Math.min(sacrificesToPerform, sacrificesToCap);
+		//Stop sacrificing unicorns when we reach the cap on unicorn tears.
+		//Also don't ever sacrifice more unicorns than we actually have.
+		sacrificesToPerform = Math.min(sacrificesToPerform, sacrificesToCap, Math.floor(unicorns.value / UNICORNS_PER_SACRIFICE));
 		if (sacrificesToPerform < 1) {
 			return; //We don't want to do any sacrifices after all.
 		}
