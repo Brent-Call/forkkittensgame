@@ -187,6 +187,7 @@ dojo.declare("classes.managers.TimeManager", com.nuclearunicorn.core.TabManager,
         this.game.village.fastforward(daysOffset);
         this.game.space.fastforward(daysOffset);
         this.game.religion.fastforward(daysOffset);
+        this.game.religion.autoSacrificeUnicorns();
 
         this.game.resPool.enforceLimits(resourceLimits);
 
@@ -626,6 +627,7 @@ dojo.declare("classes.managers.TimeManager", com.nuclearunicorn.core.TabManager,
                 if (this.game.workshop.get("chronoEngineers").researched) {
                     this.game.workshop.craftByEngineers(remainingTicksInCurrentYear * shatterTCGain);
                 }
+                this.game.religion.autoSacrificeUnicorns();
                 for (var j = 0; j < game.resPool.resources.length; j++) {
                     var res = game.resPool.resources[j];
                     res.value = Math.min(res.value, limits[res.name]);
@@ -715,6 +717,7 @@ dojo.declare("classes.managers.TimeManager", com.nuclearunicorn.core.TabManager,
                 if (this.game.workshop.get("chronoEngineers").researched) {
                     this.game.workshop.craftByEngineers(remainingTicksInCurrentCycle * shatterTCGain);
                 }
+                this.game.religion.autoSacrificeUnicorns();
                 for (var j = 0; j < game.resPool.resources.length; j++) {
                     var res = game.resPool.resources[j];
                     res.value = Math.min(res.value, limits[res.name]);
@@ -844,6 +847,7 @@ dojo.declare("classes.managers.TimeManager", com.nuclearunicorn.core.TabManager,
                 if (this.game.workshop.get("chronoEngineers").researched) {
                     this.game.workshop.craftByEngineers(ticksInCurrentCycle * shatterTCGain);
                 }
+                this.game.religion.autoSacrificeUnicorns();
                 for (var j = 0; j < game.resPool.resources.length; j++) {
                     var res = game.resPool.resources[j];
                     /*

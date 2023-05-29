@@ -333,6 +333,57 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		}
 	},
 
+	//Only in the Unicorn Tears Challenge, auto-sacrifice unicorns when near the cap until we get to max tears.
+	//This function is intended to be called once per season, when calculating redshift, & when calculating TC shatter.
+	//Requires that the policy Ritual Calendar is researched.
+	autoSacrificeUnicorns: function() {
+		if (!this.game.challenges.isActive("unicornTears")) {
+			return; //This feature is for the Unicorn Tears Challenge only.
+		}
+		if (!this.game.science.getPolicy("ritualCalendar").researched) {
+			return; //Required policy is not researched.
+		}
+		var sacrificeThreshold = this.game.getEffect("autoSacrificeUnicornsThreshold"); //What percentage of max unicorns we need to get to before we will auto-sacrifice.
+		var UNICORNS_PER_SACRIFICE = 2500; //How many unicorns are sacrificed at once.
+		var MIN_AMOUNT_TO_TRIGGER_SACRIFICE = 2500 / sacrificeThreshold;
+		var unicorns = this.game.resPool.get("unicorns");
+		if (unicorns.maxValue < MIN_AMOUNT_TO_TRIGGER_SACRIFICE ) {
+			return; //Not enough max unicorns to ever get to threshold & trigger an auto-sacrifice.
+		}
+		if (unicorns.value < unicorns.maxValue * sacrificeThreshold) {
+			return; //Not enough actual unicorns to trigger an auto-sacrifice.
+		}
+		//Else, we have more unicorns than the threshold, so we may want to sacrifice some.
+		var unicornsToSacrifice = Math.max(1 /*to prevent possible rounding error issues*/, unicorns.value - unicorns.maxValue * sacrificeThreshold);
+		var sacrificesToPerform = Math.ceil(unicornsToSacrifice / UNICORNS_PER_SACRIFICE); //How many sacrifices we need to do to get below 95% of unicorns cap
+
+		var tearsPerSacrifice = this.game.bld.get("ziggurat").on * 0.7; //30% penalty to tears gained.
+
+		var tears = this.game.resPool.get("tears");
+		var tearsToCap = Math.max(0, tears.maxValue - tears.value);
+		var sacrificesToCap = Math.ceil(tearsToCap / tearsPerSacrifice);
+
+		//Stop sacrificing unicorns when we reach the cap on unicorn tears:
+		sacrificesToPerform = Math.min(sacrificesToPerform, sacrificesToCap);
+		if (sacrificesToPerform < 1) {
+			return; //We don't want to do any sacrifices after all.
+		}
+
+		var CATH_POLLUTION_PER_OVERCAP = 5; //In the Unicorn Tears Challenge if we refine over the limit, some of it gets converted into pollution.
+		
+		unicornsToSacrifice = UNICORNS_PER_SACRIFICE * sacrificesToPerform;
+		this.game.stats.getStat("unicornsSacrificed").val += unicornsToSacrifice;
+		this.game.resPool.addResEvent("unicorns", -unicornsToSacrifice);
+		var tearsExpectedGained = tearsPerSacrifice * sacrificesToPerform;
+		var tearsActualGained = this.game.resPool.addResEvent("tears", tearsExpectedGained);
+		var overcap = tearsExpectedGained - tearsActualGained;
+		if (overcap > 0.001) {
+			this.game.bld.cathPollution += overcap * CATH_POLLUTION_PER_OVERCAP;
+			this.game.msg($I("religion.sacrificeBtn.sacrifice.msg.overcap", [this.game.getDisplayValueExt(overcap)]), "", "unicornSacrifice", true /*noBullet*/);
+		}
+		this.game.msg($I("religion.sacrificeBtn.sacrifice.auto.msg", [this.game.getDisplayValueExt(unicornsToSacrifice), this.game.getDisplayValueExt(tearsActualGained)]), "", "unicornSacrifice" );
+	},
+
 	zigguratUpgrades: [{
 		name: "unicornTomb",
 		label: $I("religion.zu.unicornTomb.label"),

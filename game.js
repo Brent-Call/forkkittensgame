@@ -1584,6 +1584,10 @@ dojo.declare("com.nuclearunicorn.game.EffectsManager", null, {
 				title: $I("effectsMgr.statics.markerCostIncrease.title"),
 				type: "ratio"
 			},
+			"autoSacrificeUnicornsThreshold": {
+				title: $I("effectsMgr.statics.autoSacrificeUnicornsThreshold.title"),
+				type: "ratio"
+			},
 			"cryochamberSupport":{
 				title: $I("effectsMgr.statics.cryochamberSupport.title"),
 			},

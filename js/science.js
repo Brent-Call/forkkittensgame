@@ -1420,6 +1420,9 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 			{name: "spice", val: 5000},
 			{name: "culture", val: 4250}
 		],
+		effects: {
+			"autoSacrificeUnicornsThreshold": 0.5
+		},
 		unlocked: false,
 		blocked: false,
 		blocks: [ "religiousArchitecture", "holyGround" ]
