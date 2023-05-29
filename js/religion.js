@@ -353,10 +353,12 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				"faithMax": 0,
 				"tearsMax": 0
 			};
-			if (game.challenges.getChallenge("unicornTears").researched && !game.challenges.isActive("unicornTears")) {
-				effects["faithMax"] = game.getEffect("unicornTombBaseMaxFaith");
-			} else {
+			if (game.challenges.isActive("unicornTears")) {
 				effects["tearsMax"] = game.getEffect("unicornTombMaxTears");
+			} else {
+				if (game.challenges.getChallenge("unicornTears").researched) {
+					effects["faithMax"] = 75;
+				}
 			}
 			self.effects = effects;
 		},
@@ -1315,7 +1317,7 @@ dojo.declare("com.nuclearunicorn.game.ui.ZigguratBtnController", com.nuclearunic
 	getPrices: function(model) {
 		var meta = model.metadata;
 		var ratio = meta.priceRatio || 1;
-		var ivoryRatio = Math.max(ratio + this.game.getEffect("zigguratIvoryPriceRatio"), 1.01);
+		var ivoryRatio = Math.max(ratio + this.game.getEffect("zigguratIvoryPriceRatio"), 1);
 		var prices = [];
 		var pricesDiscount = this.game.getLimitedDR((this.game.getEffect(meta.name + "CostReduction")), 1);
 		var priceModifier = 1 - pricesDiscount;

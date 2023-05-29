@@ -1580,10 +1580,6 @@ dojo.declare("com.nuclearunicorn.game.EffectsManager", null, {
 				title: $I("effectsMgr.statics.zigguratIvoryPriceRatio.title"),
 				type: "ratio"
 			},
-			"unicornTombBaseMaxFaith": {
-				title: $I("effectsMgr.statics.unicornTombBaseMaxFaith.title"),
-				type: "fixed"
-			},
 			"markerCostIncrease": {
 				title: $I("effectsMgr.statics.markerCostIncrease.title"),
 				type: "ratio"

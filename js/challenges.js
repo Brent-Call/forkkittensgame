@@ -360,23 +360,20 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		unlocked: false,
 		effects: {
 			"zigguratIvoryPriceRatio": -0.05,
-			"unicornTombBaseMaxFaith": 40,
 			"markerCostIncrease": 0
 		},
 		calculateEffects: function(self, game) {
 			if (self.active) {
 				self.effects["markerCostIncrease"] = 0.75;
-				self.effects["unicornTombBaseMaxFaith"] = 0;
 				self.effects["zigguratIvoryPriceRatio"] = 0;
 			} else {
 				self.effects["markerCostIncrease"] = 0;
-				self.effects["zigguratIvoryPriceRatio"] = -0.05;
-				self.effects["unicornTombBaseMaxFaith"] = 40;
+				self.effects["zigguratIvoryPriceRatio"] = -0.015;
 			}
 			game.upgrade(self.upgrades); //HACK
 		},
 		stackOptions: {
-			"zigguratIvoryPriceRatio": { capMagnitude: 0.14 },
+			"zigguratIvoryPriceRatio": { LDRLimit: 0.15 },
 			"markerCostIncrease": { LDRLimit: 9 }
 		},
 		checkCompletionCondition: function(game) {
