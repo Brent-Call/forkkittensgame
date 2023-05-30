@@ -384,7 +384,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		var tearsActualGained = this.game.resPool.addResEvent("tears", tearsExpectedGained);
 		var overcap = tearsExpectedGained - tearsActualGained;
 		if (overcap > 0.001) {
-			this.game.bld.cathPollution += overcap * CATH_POLLUTION_PER_OVERCAP;
+			this.game.bld.cathPollution += overcap * CATH_POLLUTION_PER_OVERCAP * (1 + this.game.getEffect("cathPollutionRatio"));
 			this.game.msg($I("religion.sacrificeBtn.sacrifice.msg.overcap", [this.game.getDisplayValueExt(overcap)]), "", "unicornSacrifice", true /*noBullet*/);
 		}
 		this.game.msg($I("religion.sacrificeBtn.sacrifice.auto.msg", [this.game.getDisplayValueExt(unicornsToSacrifice), this.game.getDisplayValueExt(tearsActualGained)]), "", "unicornSacrifice" );
@@ -1555,7 +1555,7 @@ dojo.declare("classes.ui.religion.TransformBtnController", com.nuclearunicorn.ga
 				this.game.msg($I(this.controllerOpts.overcapMsgID, [this.game.getDisplayValueExt(overcap)]), "", this.controllerOpts.logfilterID, true /*noBullet*/);
 			}
 			if (this.controllerOpts.cathPollutionPerOvercap) { //Optional parameter--if truthy, overcapping affects pollution
-				this.game.bld.cathPollution += overcap * this.controllerOpts.cathPollutionPerOvercap;
+				this.game.bld.cathPollution += overcap * this.controllerOpts.cathPollutionPerOvercap * (1 + this.game.getEffect("cathPollutionRatio"));
 			}
 		}
 
