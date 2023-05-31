@@ -1412,7 +1412,9 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
         unlocked: false,
         blocked: false,
         blocks:["rationality"]
-    }, {
+    },
+	//----------------   Policies specific to the Unicorn Tears Challenge   --------------------
+	{
 		name: "ritualCalendar",
 		label: $I("policy.ritualCalendar.label"),
 		description: $I("policy.ritualCalendar.desc"),
@@ -1459,6 +1461,9 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 			game.upgrade({ buildings: ["ziggurat"]});
 			//Repurpose an existing console log message:
 			game.msg($I("construct.all.msg", [ziggurats.label, 5]));
+		},
+		effects: {
+			"unicornSacrificeRatio": 0.05
 		},
 		unlocked: false,
 		blocked: false,

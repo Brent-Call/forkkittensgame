@@ -340,7 +340,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 	 * @return A nonnegative number (not necessarily an integer; could theoretically be zero)
 	 */
 	getUnicornTearsGainedPerSacrifice: function(automatic) {
-		var retVal = this.game.bld.get("ziggurat").on;
+		var retVal = this.game.bld.get("ziggurat").on * (1 + this.game.getEffect("unicornSacrificeRatio"));
 		if (automatic) {
 			retVal *= 0.7; //30% penalty (intended to reward active play)
 		}
