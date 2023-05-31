@@ -333,6 +333,20 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		}
 	},
 
+	/**
+	 * Calculates the number of unicorn tears gained per batch of unicorns sacrificed.
+	 * Currently, unicorns are sacrificed in batches of 2500, & the number of tears gained is 1 per Ziggurat.
+	 * @param automatic If truthy, calculates the tears gained for an automatic sacrifice.  If falsy, calculates tears for a manual sacrifice.
+	 * @return A nonnegative number (not necessarily an integer; could theoretically be zero)
+	 */
+	getUnicornTearsGainedPerSacrifice: function(automatic) {
+		var retVal = this.game.bld.get("ziggurat").on;
+		if (automatic) {
+			retVal *= 0.7; //30% penalty (intended to reward active play)
+		}
+		return retVal;
+	},
+
 	//Only in the Unicorn Tears Challenge, auto-sacrifice unicorns when near the cap until we get to max tears.
 	//This function is intended to be called once per season, when calculating redshift, & when calculating TC shatter.
 	//Requires that the policy Ritual Calendar is researched.
@@ -362,7 +376,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		var unicornsToSacrifice = Math.max(1 /*to prevent possible rounding error issues*/, unicorns.value - unicorns.maxValue * sacrificeThreshold);
 		var sacrificesToPerform = Math.ceil(unicornsToSacrifice / UNICORNS_PER_SACRIFICE); //How many sacrifices we need to do to get below 95% of unicorns cap
 
-		var tearsPerSacrifice = this.game.bld.get("ziggurat").on * 0.7; //30% penalty to tears gained.
+		var tearsPerSacrifice = this.getUnicornTearsGainedPerSacrifice(true /*automatic*/);
 
 		var tears = this.game.resPool.get("tears");
 		var tearsToCap = Math.max(0, tears.maxValue - tears.value);
@@ -2191,7 +2205,7 @@ dojo.declare("com.nuclearunicorn.game.ui.tab.ReligionTab", com.nuclearunicorn.ga
 				prices: [{ name: "unicorns", val: 2500}],
 				controller: new classes.ui.religion.TransformBtnController(game, {
 					gainMultiplier: function() {
-						return this.game.bld.get("ziggurat").on;
+						return this.game.religion.getUnicornTearsGainedPerSacrifice(false /*automatic*/);
 					},
 					gainedResource: "tears",
 					applyAtGain: function(priceCount) {
