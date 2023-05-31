@@ -977,7 +977,6 @@
     "religion.sacrificeBtn.label": "Sacrifice Unicorns",
     "religion.sacrificeBtn.desc": "Return the unicorns to the Unicorn Dimension. You will receive one Unicorn Tear for every ziggurat you have.",
     "religion.sacrificeBtn.sacrifice.auto.msg": "{0} unicorns were automatically sacrificed. A penalty was applied, so you only gained {1} unicorn tears.",
-    "religion.sacrificeBtn.sacrifice.auto.failed.msg": "The scheduled ritual was canceled because there was no suitable location to perform the sacrifice!",
     "religion.sacrificeBtn.sacrifice.msg": "{0} unicorns have been sacrificed. You've got {1} unicorn tears!",
     "religion.sacrificeBtn.sacrifice.msg.overcap": "{0} tears spilled, vanishing into black smoke.",
     "religion.transcend.confirmation.title": "Transcend?",

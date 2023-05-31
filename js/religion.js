@@ -374,7 +374,6 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		}
 		var tearsPerSacrifice = this.getUnicornTearsGainedPerSacrifice(true /*automatic*/);
 		if (tearsPerSacrifice < 0.001 /*rounding error?  I don't expect this to ever actually occur but just in case*/) {
-			this.game.msg($I("religion.sacrificeBtn.sacrifice.auto.failed.msg"), "", "unicornSacrifice" );
 			return; //There is nothing to gain from the sacrifice, so no point in doing it.
 		}
 
