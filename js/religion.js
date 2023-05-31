@@ -372,11 +372,15 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		if (unicorns.value < unicorns.maxValue * sacrificeThreshold) {
 			return; //Not enough actual unicorns to trigger an auto-sacrifice.
 		}
+		var tearsPerSacrifice = this.getUnicornTearsGainedPerSacrifice(true /*automatic*/);
+		if (tearsPerSacrifice < 0.001 /*rounding error?  I don't expect this to ever actually occur but just in case*/) {
+			this.game.msg($I("religion.sacrificeBtn.sacrifice.auto.failed.msg"), "", "unicornSacrifice" );
+			return; //There is nothing to gain from the sacrifice, so no point in doing it.
+		}
+
 		//Else, we have more unicorns than the threshold, so we may want to sacrifice some.
 		var unicornsToSacrifice = Math.max(1 /*to prevent possible rounding error issues*/, unicorns.value - unicorns.maxValue * sacrificeThreshold);
 		var sacrificesToPerform = Math.ceil(unicornsToSacrifice / UNICORNS_PER_SACRIFICE); //How many sacrifices we need to do to get below 95% of unicorns cap
-
-		var tearsPerSacrifice = this.getUnicornTearsGainedPerSacrifice(true /*automatic*/);
 
 		var tears = this.game.resPool.get("tears");
 		var tearsToCap = Math.max(0, tears.maxValue - tears.value);
