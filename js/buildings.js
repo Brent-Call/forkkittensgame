@@ -1863,6 +1863,14 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			if(self.val){
 				game.time.queue.unlockQueueSource("zigguratUpgrades");
 			}
+		},
+		canSell: function(self, game){
+			if (game.science.getPolicy("holyGround").researched == true){
+				game.msg($I("buildings.ziggurat.attemptsell"));
+				return false;
+			}
+			//Else, nothing preventing us from selling.
+			return true;
 		}
 	},{
 		name: "chronosphere",
