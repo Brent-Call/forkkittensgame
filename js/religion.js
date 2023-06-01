@@ -2201,10 +2201,11 @@ dojo.declare("com.nuclearunicorn.game.ui.tab.ReligionTab", com.nuclearunicorn.ga
 		if (zigguratCount > 0){
 			var zigguratPanel = new com.nuclearunicorn.game.ui.Panel($I("religion.panel.ziggurat.label"), game.religion);
 			var content = zigguratPanel.render(container);
+			var sacrificeRatio = 1 + game.getEffect("unicornSacrificeRatio");
 
 			var sacrificeBtn = new classes.ui.religion.MultiLinkBtn({
 				name: $I("religion.sacrificeBtn.label"),
-				description: $I("religion.sacrificeBtn.desc"),
+				description: sacrificeRatio == 1 ? $I("religion.sacrificeBtn.desc") : $I("religion.sacrificeBtn.desc2", [game.getDisplayValueExt(sacrificeRatio)]),
 				prices: [{ name: "unicorns", val: 2500}],
 				controller: new classes.ui.religion.TransformBtnController(game, {
 					gainMultiplier: function() {

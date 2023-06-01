@@ -978,6 +978,7 @@
     "religion.sacrificeBtn.all": "all",
     "religion.sacrificeBtn.label": "Sacrifice Unicorns",
     "religion.sacrificeBtn.desc": "Return the unicorns to the Unicorn Dimension. You will receive one Unicorn Tear for every ziggurat you have.",
+    "religion.sacrificeBtn.desc2": "Return the unicorns to the Unicorn Dimension. You will receive {0} Unicorn Tears for every ziggurat you have.",
     "religion.sacrificeBtn.sacrifice.auto.msg": "{0} unicorns were automatically sacrificed. A penalty was applied, so you only gained {1} unicorn tears.",
     "religion.sacrificeBtn.sacrifice.msg": "{0} unicorns have been sacrificed. You've got {1} unicorn tears!",
     "religion.sacrificeBtn.sacrifice.msg.overcap": "{0} tears spilled, vanishing into black smoke.",
