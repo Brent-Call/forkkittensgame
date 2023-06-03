@@ -1427,14 +1427,14 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		},
 		unlocked: false,
 		blocked: false,
-		blocks: [ "religiousArchitecture", "holyGround" ],
+		blocks: [ "persistence", "holyGround" ],
 		evaluateLocks: function(game) {
 			return game.challenges.getChallenge("unicornTears").active && game.religion.getZU("unicornTomb").val > 0;
 		}
 	}, {
-		name: "religiousArchitecture",
-		label: $I("policy.religiousArchitecture.label"),
-		description: $I("policy.religiousArchitecture.desc"),
+		name: "persistence",
+		label: $I("policy.persistence.label"),
+		description: $I("policy.persistence.desc"),
 		prices: [
 			{name: "science", val: 5000},
 			{name: "culture", val: 4250}
@@ -1467,7 +1467,7 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		},
 		unlocked: false,
 		blocked: false,
-		blocks: [ "ritualCalendar", "religiousArchitecture" ],
+		blocks: [ "ritualCalendar", "persistence" ],
 		evaluateLocks: function(game) {
 			return game.challenges.getChallenge("unicornTears").active && game.religion.getZU("unicornTomb").val > 0;
 		}
