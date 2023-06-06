@@ -1420,7 +1420,7 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		description: $I("policy.ritualCalendar.desc"),
 		prices: [
 			{name: "spice", val: 5000},
-			{name: "culture", val: 4250}
+			{name: "culture", val: 17500}
 		],
 		effects: {
 			"autoSacrificeUnicornsThreshold": 0.5
@@ -1429,22 +1429,29 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		blocked: false,
 		blocks: [ "persistence", "holyGround" ],
 		evaluateLocks: function(game) {
-			return game.challenges.getChallenge("unicornTears").active && game.religion.getZU("unicornTomb").val > 0;
+			return game.challenges.isActive("unicornTears") && game.religion.getZU("unicornTomb").val > 0;
 		}
 	}, {
 		name: "persistence",
 		label: $I("policy.persistence.label"),
 		description: $I("policy.persistence.desc"),
 		prices: [
-			{name: "science", val: 5000},
-			{name: "culture", val: 4250}
+			{name: "faith", val: 5000},
+			{name: "culture", val: 17500}
 		],
+		calculateEffects: function(self, game) {
+			if (game.challenges.isActive("atheism")) {
+				self.description = $I("policy.persistence.atheism.desc");
+			} else {
+				self.description = $I("policy.persistence.desc");
+			}
+		},
 		unlocked: false,
 		blocked: false,
 		blocks: [ "ritualCalendar", "holyGround" ],
 		evaluateLocks: function(game) {
 			//Requires you to have at least 1 paragon of either regular or burned variety
-			return game.challenges.getChallenge("unicornTears").active && game.religion.getZU("unicornTomb").val > 0 && game.prestige.getParagonStorageRatio() > 0;
+			return game.challenges.isActive("unicornTears") && game.religion.getZU("unicornTomb").val > 0 && game.prestige.getParagonStorageRatio() > 0;
 		}
 	}, {
 		name: "holyGround",
@@ -1452,7 +1459,7 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		description: $I("policy.holyGround.desc"),
 		prices: [
 			{name: "megalith", val: 5000},
-			{name: "culture", val: 4250}
+			{name: "culture", val: 17500}
 		],
 		onResearch: function(game) {
 			var ziggurats = game.bld.get("ziggurat");
@@ -1469,7 +1476,7 @@ dojo.declare("classes.managers.ScienceManager", com.nuclearunicorn.core.TabManag
 		blocked: false,
 		blocks: [ "ritualCalendar", "persistence" ],
 		evaluateLocks: function(game) {
-			return game.challenges.getChallenge("unicornTears").active && game.religion.getZU("unicornTomb").val > 0;
+			return game.challenges.isActive("unicornTears") && game.religion.getZU("unicornTomb").val > 0;
 		}
 	},
     //----------------   Environmental Policy   --------------------
@@ -1896,9 +1903,13 @@ dojo.declare("classes.ui.PolicyBtnController", com.nuclearunicorn.game.ui.Buildi
 		var policyFakeBought = this.game.getEffect("policyFakeBought");
 		var prices = [];
 		for (var i = 0; i < meta.prices.length; i++){
+			var resName = meta.prices[i].name;
+			if (meta.name == "persistence" && resName == "faith" && this.game.challenges.isActive("atheism")) {
+				resName = "science"; //Replace faith with science in Atheism
+			}
             prices.push({
 				val: meta.prices[i].val * Math.pow(1.25, policyFakeBought),
-				name: meta.prices[i].name
+				name: resName
 			});
 		}
         return prices;
