@@ -379,6 +379,17 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		checkCompletionCondition: function(game) {
 			return game.resPool.get("necrocorn").value >= 1;
 		},
+		actionOnCompletion: function(game) {
+			//Block any policies that are useless outside the Unicorn Tears Challenge:
+			var ritualCalendar = game.science.getPolicy("ritualCalendar");
+			if (!ritualCalendar.researched) {
+				ritualCalendar.blocked = true;
+			}
+			var persistence = game.science.getPolicy("persistence");
+			if (!persistence.researched) {
+				persistence.blocked = true;
+			}
+		},
 		upgrades: {
 			zigguratUpgrades: ["unicornTomb"] //HACK
 		},
