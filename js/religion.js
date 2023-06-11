@@ -2254,7 +2254,12 @@ dojo.declare("com.nuclearunicorn.game.ui.tab.ReligionTab", com.nuclearunicorn.ga
 				prices: [{ name: "tears", val: 10000}],
 				controller: new classes.ui.religion.RefineTearsBtnController(game, {
 					updateVisible: function(model) {
-						model.visible = this.game.religion.getZU("blackPyramid").unlocked;
+						var tearsRes = this.game.resPool.get("tears");
+						if (this.game.challenges.isActive("unicornTears") && Math.max(tearsRes.value, tearsRes.maxValue) < 7500) {
+							model.visible = false; //Max tears is too small for something that costs 10k to be relevant...
+							return;
+						}
+						model.visible = this.game.religion.getZU("blackPyramid").unlocked && tearsRes.unlocked;
 					}
 				})
 			}, game);
