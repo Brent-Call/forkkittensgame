@@ -431,7 +431,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				effects["tearsMax"] = game.getEffect("unicornTombMaxTears");
 			} else {
 				if (game.challenges.getChallenge("unicornTears").researched) {
-					effects["faithMax"] = 75;
+					effects["faithMax"] = 400;
 				}
 			}
 			self.effects = effects;
