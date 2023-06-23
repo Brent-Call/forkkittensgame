@@ -441,7 +441,7 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 	effectsBase: {
 		"unicornsMax": 0,
 		"tearsMax": 0,
-		"zigguratMaxTears": 0
+		"zigguratTearsMax": 0
 	},
 
 	game: null,
@@ -540,8 +540,8 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 			effectsBase["tearsMax"] = 1;
 
 			//Don't call game.upgrade every tick--only call it when we actually need to apply a change.
-			if (effectsBase["zigguratMaxTears"] != 2) {
-				effectsBase["zigguratMaxTears"] = 2;
+			if (effectsBase["zigguratTearsMax"] != 2) {
+				effectsBase["zigguratTearsMax"] = 2;
 				this.game.upgrade({buildings: ["ziggurat"]});
 			}
 		} else {
@@ -549,8 +549,8 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 			effectsBase["tearsMax"] = 0;
 
 			//Don't call game.upgrade every tick--only call it when we actually need to apply a change.
-			if (effectsBase["zigguratMaxTears"] != 0) {
-				effectsBase["zigguratMaxTears"] = 0;
+			if (effectsBase["zigguratTearsMax"] != 0) {
+				effectsBase["zigguratTearsMax"] = 0;
 				this.game.upgrade({buildings: ["ziggurat"]});
 			}
 		}

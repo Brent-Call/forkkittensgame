@@ -428,7 +428,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				"tearsMax": 0
 			};
 			if (game.challenges.isActive("unicornTears")) {
-				effects["tearsMax"] = game.getEffect("unicornTombMaxTears");
+				effects["tearsMax"] = game.getEffect("unicornTombTearsMax");
 			} else {
 				if (game.challenges.getChallenge("unicornTears").researched) {
 					effects["faithMax"] = 400;
@@ -514,7 +514,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			"alicornPerTick" : 0,
 			"ivoryMeteorRatio" : 0,
 			"unicornsMax": 0,
-			"zigguratMaxTears": 0
+			"zigguratTearsMax": 0
 		},
 		calculateEffects: function(self, game) {
 			var effects = {
@@ -524,14 +524,14 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				"alicornPerTick" : 0,
 				"ivoryMeteorRatio" : 0.05,
 				"unicornsMax": 0,
-				"zigguratMaxTears": 0
+				"zigguratTearsMax": 0
 			};
 			if (game.resPool.get("alicorn").value > 0) {
 				effects["alicornPerTick"] = 0.00002;
 			}
 			if (game.challenges.isActive("unicornTears")) {
 				effects["unicornsMax"] = 500;
-				effects["zigguratMaxTears"] = 4;
+				effects["zigguratTearsMax"] = 4;
 			}
 			self.effects = effects;
 		},
@@ -560,7 +560,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 			"tcRefineRatio" : 0,
 			"ivoryMeteorRatio" : 0,
 			"unicornsMax": 0,
-			"unicornTombMaxTears": 0
+			"unicornTombTearsMax": 0
 		},
 		calculateEffects: function(self, game) {
 			var effects = {
@@ -570,14 +570,14 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				"tcRefineRatio" : 0.05,
 				"ivoryMeteorRatio" : 0.15,
 				"unicornsMax": 0,
-				"unicornTombMaxTears": 0
+				"unicornTombTearsMax": 0
 			};
 			if (game.resPool.get("alicorn").value > 0) {
 				effects["alicornPerTick"] = 0.000025;
 			}
 			if (game.challenges.isActive("unicornTears")) {
 				effects["unicornsMax"] = 2000;
-				effects["unicornTombMaxTears"] = 22;
+				effects["unicornTombTearsMax"] = 22;
 			}
 			self.effects = effects;
 			game.upgrade(this.upgrades); //This is a HACK
