@@ -359,7 +359,7 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		researched: false,
 		unlocked: false,
 		effects: {
-			"zigguratIvoryPriceRatio": -0.05,
+			"zigguratIvoryPriceRatio": -0.025,
 			"markerCostIncrease": 0
 		},
 		calculateEffects: function(self, game) {
@@ -368,7 +368,7 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 				self.effects["zigguratIvoryPriceRatio"] = 0;
 			} else {
 				self.effects["markerCostIncrease"] = 0;
-				self.effects["zigguratIvoryPriceRatio"] = -0.015;
+				self.effects["zigguratIvoryPriceRatio"] = -0.025;
 			}
 			game.upgrade(self.upgrades); //HACK
 		},
