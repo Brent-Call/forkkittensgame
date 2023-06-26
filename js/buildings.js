@@ -1820,8 +1820,12 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			"unicornsMax": 0
 		},
 		calculateEffects: function(self, game) {
+			self.effects["unicornsPerTickBase"] = 0.001;
 			if (game.challenges.isActive("unicornTears")) {
 				self.effects["unicornsMax"] = 50;
+				if (game.challenges.isActive("atheism")) { //Increased effect when in a combo of Atheism + Unicorn Tears
+					self.effects["unicornsPerTickBase"] *= 5; //To compensate for lack of Solar Revolution bonus
+				}
 			} else {
 				self.effects["unicornsMax"] = 0;
 			}
