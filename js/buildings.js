@@ -2258,7 +2258,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			var baseTearsCost = 0;
 
 			if (unicornTearsChallenge.getShouldBldCostExtraTears(bldName)) {
-				baseTearsCost = 2 + 1 * this.game.challenges.getChallenge("unicornTears").on;
+				baseTearsCost = unicornTearsChallenge.getBaseTearsCost();
 			}
 
 			//For any building we altered, calculate a price for it:

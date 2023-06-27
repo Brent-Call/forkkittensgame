@@ -428,6 +428,18 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 			return !this.dontChangeThesePrices[bldName];
 		},
 		/**
+		 * If a building has unicorn tears added to its base price, this function returns that base price.
+		 * Calculated as if the Challenge is currently active.
+		 * @return	Positive real number.
+		 */
+		getBaseTearsCost: function() {
+			if (this.on < 4 ) {
+				return this.on + 2;
+			}
+			//Else:
+			return 6 + Math.sqrt(this.on - 4); //After about this point, the reward has LDR, so we increase the difficulty more slowly...
+		},
+		/**
 		 * For some buildings, they DO cost unicorn tears, but only if you've already built 1 of that building.
 		 * So the first one won't have its price changed.
 		 * @param bldName	String.  The name of a building in the bonfire tab.
