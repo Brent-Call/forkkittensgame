@@ -422,9 +422,16 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		/**
 		 * Decides whether or not to add some unicorn tears to the base price of a building.
 		 * @param bldName	String.  The name of a building in the bonfire tab.
+		 * @param game		The game object.
 		 * @return	Boolean value.
 		 */
-		getShouldBldCostExtraTears: function(bldName) {
+		getShouldBldCostExtraTears: function(bldName, game) {
+			if (bldName === "steamworks") {
+				//The reason for this is that there's a circular dependency where if Steamworks cost tears, then...
+				//...obtaining tears requires Theology, which costs manuscripts, which are produced by Steamworks...
+				//...alternatively, build a Mint to get crafting material, but the Mint tech requires already having manuscripts.
+				return !game.challenges.isActive("pacifism"); //Avoid circular dependency
+			}
 			return !this.dontChangeThesePrices[bldName];
 		},
 		/**

@@ -2257,7 +2257,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			var unicornTearsChallenge = this.game.challenges.getChallenge("unicornTears");
 			var baseTearsCost = 0;
 
-			if (unicornTearsChallenge.getShouldBldCostExtraTears(bldName)) {
+			if (unicornTearsChallenge.getShouldBldCostExtraTears(bldName, this.game)) {
 				baseTearsCost = unicornTearsChallenge.getBaseTearsCost();
 			}
 
