@@ -550,10 +550,13 @@ dojo.declare("com.nuclearunicorn.game.Calendar", null, {
 		}
 
 		//------------------------- 0.035% chance of spawning unicorns in pacifism -----------------
+		var easierUnicornsFromChallenge = this.game.challenges.isActive("unicornTears") ? 50 : 1;
 		if(this.game.challenges.isActive("pacifism")){
 			var animal = this.game.science.get("animal");
 			var unicorns = this.game.resPool.get("unicorns");
-			if (this.game.rand(100000) <= 17 * unicornChanceRatio && unicorns.value < 2 && animal.researched){
+			//Unicorn Tears Challenge multiplies the chance, but only for online progress
+			if (this.game.rand(100000) <= 17 * unicornChanceRatio * easierUnicornsFromChallenge &&
+					unicorns.value < 2 && animal.researched){
 				this.game.resPool.addResEvent("unicorns", 1);
 				this.game.msg($I("calendar.msg.unicorn"));
 			}
@@ -564,7 +567,9 @@ dojo.declare("com.nuclearunicorn.game.Calendar", null, {
 		if (this.game.ironWill){
 			var archery = this.game.science.get("archery");
 			var unicorns = this.game.resPool.get("unicorns");
-			if (this.game.rand(100000) <= 17 * unicornChanceRatio && unicorns.value < 2 && archery.researched){
+			//Unicorn Tears Challenge multiplies the chance, but only for online progress
+			if (this.game.rand(100000) <= 17 * unicornChanceRatio * easierUnicornsFromChallenge &&
+					unicorns.value < 2 && archery.researched){
 				this.game.resPool.addResEvent("unicorns", 1);
 				this.game.msg($I("calendar.msg.unicorn"));
 			}
