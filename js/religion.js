@@ -431,7 +431,8 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				effects["tearsMax"] = game.getEffect("unicornTombTearsMax");
 			} else {
 				if (game.challenges.getChallenge("unicornTears").researched) {
-					effects["faithMax"] = 400;
+					effects["faithMax"] = (3 * Math.pow(game.religion.transcendenceTier, 1.5)) +
+						(5.13 * game.challenges.getChallenge("unicornTears").on);
 				}
 			}
 			self.effects = effects;
@@ -1294,6 +1295,8 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				atheism.calculateEffects(atheism, game);
 				var blackObelisk = religion.getTU("blackObelisk");
 				blackObelisk.calculateEffects(blackObelisk, game);
+				var unicornTomb = religion.getZU("unicornTomb");
+				unicornTomb.calculateEffects(unicornTomb, game);
 				if(game.getFeatureFlag("MAUSOLEUM_PACTS") && game.religion.getTU("mausoleum").val){
 					var blackPyramid = game.religion.getZU("blackPyramid");
 					blackPyramid.calculateEffects(blackPyramid, game);
