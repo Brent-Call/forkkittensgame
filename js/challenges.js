@@ -422,10 +422,13 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		/**
 		 * Decides whether or not to add some unicorn tears to the base price of a building.
 		 * @param bldName	String.  The name of a building in the bonfire tab.
-		 * @param game		The game object.
+		 * @param game		The game object; needed to check for more complex conditions.
 		 * @return	Boolean value.
 		 */
 		getShouldBldCostExtraTears: function(bldName, game) {
+			if (typeof(game) !== "object") {
+				throw "Missing parameter \"game\" in getShouldBldCostExtraTears";
+			}
 			if (bldName === "steamworks") {
 				//The reason for this is that there's a circular dependency where if Steamworks cost tears, then...
 				//...obtaining tears requires Theology, which costs manuscripts, which are produced by Steamworks...
@@ -437,9 +440,13 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		/**
 		 * If a building has unicorn tears added to its base price, this function returns that base price.
 		 * Calculated as if the Challenge is currently active.
+		 * @param game		The game object; not used for anything right now but included just in case a future dev wants this.
 		 * @return	Positive real number.
 		 */
-		getBaseTearsCost: function() {
+		getBaseTearsCost: function(game) {
+			if (typeof(game) !== "object") {
+				throw "Missing parameter \"game\" in getBaseTearsCost";
+			}
 			if (this.on < 4 ) {
 				return this.on + 2;
 			}
@@ -450,9 +457,13 @@ dojo.declare("classes.managers.ChallengesManager", com.nuclearunicorn.core.TabMa
 		 * For some buildings, they DO cost unicorn tears, but only if you've already built 1 of that building.
 		 * So the first one won't have its price changed.
 		 * @param bldName	String.  The name of a building in the bonfire tab.
+		 * @param game		The game object; not used for anything right now but included just in case a future dev wants this.
 		 * @return	Boolean value.
 		 */
-		getIsFirstBldExempt: function(bldName) {
+		getIsFirstBldExempt: function(bldName, game) {
+			if (typeof(game) !== "object") {
+				throw "Missing parameter \"game\" in getIsFirstBldExempt";
+			}
 			return this.isFirstOneFree[bldName];
 		}
 	}],

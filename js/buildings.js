@@ -2258,12 +2258,12 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			var baseTearsCost = 0;
 
 			if (unicornTearsChallenge.getShouldBldCostExtraTears(bldName, this.game)) {
-				baseTearsCost = unicornTearsChallenge.getBaseTearsCost();
+				baseTearsCost = unicornTearsChallenge.getBaseTearsCost(this.game);
 			}
 
 			//For any building we altered, calculate a price for it:
 			if (baseTearsCost > 0) {
-				if (unicornTearsChallenge.getIsFirstBldExempt(bldName) && bld.get("val") == 0) {
+				if (unicornTearsChallenge.getIsFirstBldExempt(bldName, this.game) && bld.get("val") == 0) {
 					baseTearsCost = 0; //Building is so important that the first one costs 0 tears.
 				}
 
