@@ -357,7 +357,8 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		if (!this.game.science.getPolicy("ritualCalendar").researched) {
 			return; //Required policy is not researched.
 		}
-		var sacrificeThreshold = this.game.getEffect("autoSacrificeUnicornsThreshold"); //What percentage of max unicorns we need to get to before we will auto-sacrifice.
+		//What percentage of max unicorns we need to get to before we will auto-sacrifice:
+		var sacrificeThreshold = this.game.getEffect("autoSacrificeUnicornsThreshold");
 		if (sacrificeThreshold < 0) {
 			sacrificeThreshold = 0;
 		}
@@ -379,7 +380,7 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 
 		//Else, we have more unicorns than the threshold, so we may want to sacrifice some.
 		var unicornsToSacrifice = Math.max(1 /*to prevent possible rounding error issues*/, unicorns.value - unicorns.maxValue * sacrificeThreshold);
-		var sacrificesToPerform = Math.ceil(unicornsToSacrifice / UNICORNS_PER_SACRIFICE); //How many sacrifices we need to do to get below 95% of unicorns cap
+		var sacrificesToPerform = Math.ceil(unicornsToSacrifice / UNICORNS_PER_SACRIFICE); //How many sacrifices we need to do to get below the threshold
 
 		var tears = this.game.resPool.get("tears");
 		var tearsToCap = Math.max(0, tears.maxValue - tears.value);
@@ -391,8 +392,9 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		if (sacrificesToPerform < 1) {
 			return; //We don't want to do any sacrifices after all.
 		}
-
-		var CATH_POLLUTION_PER_OVERCAP = 5; //In the Unicorn Tears Challenge if we refine over the limit, some of it gets converted into pollution.
+		
+		//In the Unicorn Tears Challenge, if we refine over the limit, some of it gets converted into pollution.
+		var CATH_POLLUTION_PER_OVERCAP = 5;
 		
 		unicornsToSacrifice = UNICORNS_PER_SACRIFICE * sacrificesToPerform;
 		this.game.stats.getStat("unicornsSacrificed").val += unicornsToSacrifice;
