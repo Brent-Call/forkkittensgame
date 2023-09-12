@@ -687,11 +687,7 @@ dojo.declare("classes.managers.DiplomacyManager", null, {
 			}
 
 			if (this.game.prestige.getPerk("renaissance").researched) {
-				var unicornTearsChallenge = this.game.challenges.getChallenge("unicornTears");
-				if (!unicornTearsChallenge.unlocked) {
-					unicornTearsChallenge.unlocked = true;
-					this.game.msg($I("challendge.msg.unlock", [unicornTearsChallenge.label]));
-				}
+				this.game.challenges.getChallenge("unicornTears").unlocked = true;
 			}
 
 			ncorns.value -= amt;

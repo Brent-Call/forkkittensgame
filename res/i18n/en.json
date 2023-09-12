@@ -331,7 +331,6 @@
     "challendge.btn.log.message.on.complete": "Congratulations! You complete the challenge {0}.",
     "challendge.btn.name.complete": "{0} (Complete)",
     "challendge.btn.name.current": "{0} (Active)",
-    "challendge.msg.unlock": "Permanently unlocked the {0} challenge!",
 
     "common.collapse.all": "Collapse all",
     "common.expand.all": "Expand all",
