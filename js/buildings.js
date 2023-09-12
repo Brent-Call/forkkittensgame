@@ -773,38 +773,81 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 	},
 	{
 		name: "warehouse",
-		label: $I("buildings.warehouse.label"),
-		description: $I("buildings.warehouse.desc"),
-		prices: [
-			{ name : "beam", val: 1.5 },
-			{ name : "slab", val: 2 }
-		],
-		priceRatio: 1.15,
-		effects: {
-			"catnipMax": 0,
-			"woodMax": 0,
-			"mineralsMax": 0,
-			"coalMax": 0,
-			"ironMax": 0,
-			"titaniumMax": 0,
-			"goldMax": 0
+		stages: [
+			{
+				label: $I("buildings.warehouse.label"),
+				description: $I("buildings.warehouse.desc"),
+				flavor: $I("buildings.warehouse.flavor"),
+				prices: [
+					{ name : "beam", val: 1.5 },
+					{ name : "slab", val: 2 }
+				],
+				priceRatio: 1.15,
+				effects: {
+					"catnipMax": 0,
+					"woodMax": 0,
+					"mineralsMax": 0,
+					"coalMax": 0,
+					"ironMax": 0,
+					"titaniumMax": 0,
+					"goldMax": 0
+					},
+				stageUnlocked: true,
+				togglable: false
 			},
-		calculateEffects: function(self, game){
-			var effects = {
-				"catnipMax": 0,
-				"woodMax": 150,
-				"mineralsMax": 200,
-				"coalMax": 30,
-				"ironMax": 25,
-				"titaniumMax": 10,
-				"goldMax": 5
-			};
-
-			if (game.workshop.get("silos").researched){
-				effects["catnipMax"] = 750;
+			{
+				label: $I("buildings.spaceport.label"),
+				description: $I("buildings.spaceport.desc"),
+				flavor: $I("buildings.spaceport.flavor"),
+				prices: [
+					{ name: "titanium", val: 10000 },
+					{ name: "eludium", val: 500 },
+					{ name: "kerosene", val: 1000 },
+					{ name: "blueprint", val: 500 },
+					{ name: "starchart", val: 100000 },
+				],
+				priceRatio: 1.15,
+				effects: {
+					"moonBaseStorageBonus": 0,
+					"planetCrackerStorageBonus": 0,
+					"cryostationStorageBonus": 0,
+					"energyConsumption": 0
+				},
+				stageUnlocked: true,
+				togglable: true
 			}
-
-			self.effects = game.resPool.addBarnWarehouseRatio(effects);
+		],
+		calculateEffects: function(self, game){
+			var stageMeta = self.stages[self.stage];
+            if (self.stage == 0){
+                var effects = {
+					"catnipMax": 0,
+					"woodMax": 150,
+					"mineralsMax": 200,
+					"coalMax": 30,
+					"ironMax": 25,
+					"titaniumMax": 10,
+					"goldMax": 5
+				};
+	
+				if (game.workshop.get("silos").researched){
+					effects["catnipMax"] = 750;
+				}
+	
+				stageMeta.effects = game.resPool.addBarnWarehouseRatio(effects);
+            } else if (self.stage == 1){
+                var effects = {
+					"moonBaseStorageBonus": 0.01,
+					"planetCrackerStorageBonus": 0.01 ,
+					"cryostationStorageBonus": 0.01,
+					"energyConsumption": 40	
+                };
+                stageMeta.effects = effects;
+            }
+			
+		},
+		upgrades: {
+			spaceBuilding: ["moonBase", "planetCracker", "cryostation"]
 		},
 		flavor: $I("buildings.warehouse.flavor"),
 		unlockScheme: {
@@ -2276,6 +2319,17 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 				});
 			}
 		}
+		/**
+		 * Spaceport will use a much steper price ratio for starcharts to be a dedicated starchart sinker
+		 */
+		if (bld.get("name") == "warehouse" && bld.get("stage") == 1){
+			for (var i = 0; i < prices.length; i++) {
+				if (prices[i].name == "starchart"){
+					prices[i].val = prices[i].val * Math.pow(1.6, bld.get("val"));
+				}
+			}
+		}
+
 		return prices;
 	 },
 
@@ -2675,16 +2729,41 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			model.refundPercentage = 1.0;	//full refund for undo
 
 			//Whoever came with reverse amt notation was probably high. (Was it me?)
-			props.controller.sellInternal(model, model.metadata.val - amt);
+			props.controller.sellInternal(model, model.metadata.val - amt, false /*requireSellLink*/);
 
 		} else if (data.action == "sell"){
-			//tbd
-			console.warn("Not implemented yet");
-		} else if (data.action == "upgrade"){
-			console.warn("Not implemented yet");
-		} else if (data.action == "downgrade"){
-			console.warn("Not implemented yet");
+			//I spent too long trying to understand why Bloodrizer did it the way she did.
+			//The meat of the function requires 2 things: the controller & the model.
+			var props = { //We need these props for later when we get the model.
+				key:            bld.name,
+				name:           bld.label,
+				description:    bld.description,
+				building:       bld.name
+			};
+			if (typeof(bld.stages) == "object"){ //Be sure to get the proper type of controller for the building we're working with
+				props.controller = new classes.ui.btn.StagingBldBtnController(this.game);
+			} else {
+				props.controller = new classes.ui.btn.BuildingBtnModernController(this.game);
+			}
+			var model = props.controller.fetchModel(props); //We need the model to actually change the data of the building
+
+			//The meat of the function: un-sell the buildings.
+			//Since buildings are sold for a 50% refund, we need to un-refund everything
+			for (var i = 0; i < amt; i += 1) {
+				props.controller.incrementValue(model);
+				props.controller.payPriceForUndoRefund(model);
+			}
+			this.game.render();
+		} else if (data.action == "deltagrade"){ //Generic term for upgrading/downgrading
+			bldMetaRaw.stage = Math.max(0, bldMetaRaw.stage - amt);
+
+			//Update because it changed when we changed stages
+			bld = new classes.BuildingMeta(bldMetaRaw).getMeta();
 		}
+
+		this.game.upgrade({ buildings: [bld.name]});
+		this.game.upgrade(bld.upgrades);
+		this.game.render();
 	}/*,
 
 	refund: function(bldId, amt, refundPercentage){
@@ -2805,7 +2884,7 @@ dojo.declare("classes.ui.btn.BuildingBtnModernController", com.nuclearunicorn.ga
 		return !this.game.opts.hideSell;
 	},
 
-    build: function(model, maxBld){
+    build: function(model, opts){
 		var counter = this.inherited(arguments);
 
 		//update stats
@@ -2822,13 +2901,14 @@ dojo.declare("classes.ui.btn.BuildingBtnModernController", com.nuclearunicorn.ga
 	},
 
 	sell: function(event, model){
-		var selled = this.inherited(arguments);
-		if (selled) {
+		var amtSold = this.inherited(arguments);
+
+		if (amtSold > 0) {
 			var undo = this.game.registerUndoChange();
 			undo.addEvent("building", {
 				action: "sell",
 				metaId: model.metadata.name,
-				val: 1
+				val: amtSold
 			});
 		}
 	},
@@ -2909,38 +2989,58 @@ dojo.declare("classes.ui.btn.StagingBldBtnController", classes.ui.btn.BuildingBt
 
 	downgrade: function(model) {
 		if (this.game.opts.noConfirm) {
-			this.deltagrade(this, model, -1);
+			this.deltagrade(model, -1);
 		} else {
 			var self = this;
 			this.game.ui.confirm("", $I("buildings.downgrade.confirmation.msg"), function() {
-				self.deltagrade(self, model, -1);
+				self.deltagrade.apply(self, [model, -1]);
 			});
 		}
 	},
 
 	upgrade: function(model) {
 		if (this.game.opts.noConfirm) {
-			this.deltagrade(this, model, +1);
+			this.deltagrade(model, +1);
 		} else {
 			var self = this;
 			this.game.ui.confirm("", $I("buildings.upgrade.confirmation.msg"), function() {
-				self.deltagrade(self, model, +1);
+				self.deltagrade.apply(self, [model, +1]);
 			});
 		}
 	},
 
-	deltagrade: function(self, model, delta) {
-		var metadataRaw = self.getMetadataRaw(model);
+	/**
+	 * Upgrade or downgrade building 
+	 * @param {*} model 
+	 * @param {*} delta 
+	 */
+	deltagrade: function(model, delta) {
+		var metadataRaw = this.getMetadataRaw(model);
+		var undo = this.game.registerUndoChange();
+		undo.addEvent("building", {
+			action:"deltagrade",
+			metaId: model.options.building,
+			val: delta
+		});
+
+		if (metadataRaw.val > 0) { //Sell until 0 are left (to refund to the player)
+			undo.addEvent("building", { //The order of these undo events matters A LOT
+				action:"sell",
+				metaId: model.options.building,
+				val: metadataRaw.val
+			});
+			this.sellInternal(model, 0, false /*requireSellLink*/);
+		}
 		metadataRaw.stage += delta;
 		if (!metadataRaw.stage) {metadataRaw.stage = Math.max(0, delta);}
 
 		metadataRaw.val = 0;	//TODO: fix by using separate value flags
 		metadataRaw.on = 0;
 		if (metadataRaw.calculateEffects){
-			metadataRaw.calculateEffects(metadataRaw, self.game);
+			metadataRaw.calculateEffects(metadataRaw, this.game);
 		}
-		self.game.upgrade(metadataRaw.upgrades);
-		self.game.render();
+		this.game.upgrade(metadataRaw.upgrades);
+		this.game.render();
 	},
 
 	getMetadataRaw: function(model) {

@@ -1079,6 +1079,19 @@ dojo.declare("com.nuclearunicorn.game.EffectsManager", null, {
                 title: $I("effectsMgr.statics.queueCap"),
                 type: "fixed"
 			},
+			//Spaceports
+			"moonBaseStorageBonus": {
+				title: $I( "effectsMgr.statics.moonBaseStorageBonus.title" ),
+				type: "ratio"
+			},
+			"planetCrackerStorageBonus": {
+				title: $I( "effectsMgr.statics.planetCrackerStorageBonus.title" ),
+				type: "ratio"
+			},
+			"cryostationStorageBonus": {
+				title: $I( "effectsMgr.statics.cryostationStorageBonus.title" ),
+				type: "ratio"
+			},
 			// cycleEffects
 			"spaceElevator-prodTransferBonus": {
                 title: $I("effectsMgr.statics.spaceElevator-prodTransferBonus.title"),
@@ -1538,6 +1551,10 @@ dojo.declare("com.nuclearunicorn.game.EffectsManager", null, {
                 title: $I("effectsMgr.statics.temporalPressCap.title"),
                 type: "fixed"
 			},
+            "heatEfficiency": {
+                title: $I("effectsMgr.statics.heatEfficiency.title"),
+                type: "ratio"
+			},
             "shatterCostIncreaseChallenge": {
                 title: $I("effectsMgr.statics.shatterCostIncreaseChallenge.title"),
                 type: "ratio"
@@ -1820,23 +1837,28 @@ dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 	featureFlags: {
 		VILLAGE_MAP: {
 			beta: true,
-			main: false
+			main: false,
+			mobile: false
 		},
 		SPACE_EXPL: {
 			beta: true,
-			main: false
+			main: false,
+			mobile: false
 		},
 		MAUSOLEUM_PACTS:{
 			beta: true,
-			main: true
+			main: true,
+			mobile: true
 		},
 		QUEUE:{
 			beta: true,
-			main: true
+			main: true,
+			mobile: true
 		},
 		QUEUE_REDSHIFT: {
 			beta: true,
-			main: false
+			main: false,
+			mobile: true
 		}
 	},
 
@@ -3601,7 +3623,7 @@ dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 		stack.push({
 			name: $I("res.stack.buildings"),
 			type: "perDay",
-			value: this.getEffect(res.name + "PerDay") - this.religion.pactsManager.getSiphonedCorruption(1)
+			value: this.getEffect(res.name + "PerDay")
 		});
 		if(resName == "necrocorn"){
 			var corruptionStack = [];
@@ -3626,6 +3648,14 @@ dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 				name: $I("res.stack.time"),
 				type: "ratio",
 				value: this.timeAccelerationRatio()
+			});
+		}
+
+		if(resName == "alicorn"){
+			stack.push({
+				name: $I("res.stack.corruptionPerDaySiphoned"),
+				type: "perDay",
+				value: this.religion.gesSiphoningAlicornConsumptionPerDay()
 			});
 		}
 
@@ -3973,6 +4003,16 @@ dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 					resString += "<br>" + $I("res.toCap") + ": " + this.toDisplaySeconds(toCap.toFixed());
 				}
 			}
+		}
+		//TODO: redo this logic to decrease repetition
+		if (res.calculatePerTickAndDay && res.name == "alicorn"){ 
+			var resStackDay = this.getResourcePerDayStack(res.name),
+				resStringDay = this.processResourcePerTickStack(resStackDay, res, 0), //processResourcePerTickStack can work with perDay stack
+				resPerDay = this.getResourcePerDay(res.name);
+				if (this.opts.usePercentageResourceValues){
+					resStringDay += "<br> " + $I("res.netGain") + ": " + this.getDisplayValueExt(resPerDay, true, true);
+				}
+			return resString + resStringDay;
 		}
 		return resString;
 	},
@@ -4961,6 +5001,7 @@ dojo.declare("com.nuclearunicorn.game.ui.GamePage", null, {
 				pacts: this.religion.pactsManager.pacts.map(getName),
 				challenges: this.challenges.challenges.map(getName)
 			};
+		this.upgrade({ buildings: ["warehouse"]});
 		this.upgrade(metaKeys);
 		this.upgrade({policies: ["authocracy"]});
 	},

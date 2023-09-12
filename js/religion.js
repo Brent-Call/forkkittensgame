@@ -247,6 +247,17 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 		//------------------------- necrocorns pacts -------------------------
 		this.pactsManager.necrocornConsumptionDays(daysOffset);
 	},
+	
+	gesSiphoningAlicornConsumptionPerDay: function(){
+		if(this.game.science.getPolicy(["siphoning"]).researched){
+			var necrocornDeficitRepaymentModifier = 1;
+			if(this.pactsManager.necrocornDeficit > 0){
+				necrocornDeficitRepaymentModifier = 1 + 0.15 * (1 + this.game.getEffect("deficitRecoveryRatio")/2);
+			}
+			return this.game.getEffect("necrocornPerDay") * necrocornDeficitRepaymentModifier;
+		}
+		return 0;
+	},
 	necrocornFastForward: function(days, times){
 		//------------------------- necrocorns pacts -------------------------
 		//deficit changing
@@ -2143,7 +2154,7 @@ dojo.declare("classes.religion.pactsManager", null, {
 		this function adds appropriate karmaKittens and returns change in karma; temporary logs karma generation
 		TODO: maybe make HG bonus play into this
 		*/
-		var kittens = this.game.resPool.get("kittens").value;
+		var kittens = Math.round(this.game.resPool.get("kittens").value * (1 + this.game.getEffect("simScalingRatio")));
 		if (kittens > 35 && this.game.getEffect("pactsAvailable") > 0){
 			var oldKarmaKittens = this.game.karmaKittens;
 			var kittensKarmaPerMinneliaRatio = this.game.getEffect("kittensKarmaPerMinneliaRatio");
