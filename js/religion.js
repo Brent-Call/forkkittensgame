@@ -444,8 +444,14 @@ dojo.declare("classes.managers.ReligionManager", com.nuclearunicorn.core.TabMana
 				effects["tearsMax"] = game.getEffect("unicornTombTearsMax");
 			} else {
 				if (game.challenges.getChallenge("unicornTears").researched) {
-					effects["faithMax"] = (3 * Math.pow(game.religion.transcendenceTier, 1.5)) +
-						(5.13 * game.challenges.getChallenge("unicornTears").on);
+					var tt = game.religion.transcendenceTier;
+					if (tt < 1) { //Have some effect even if never transcended
+						effects["faithMax"] = 5;
+					} else if (tt < 100) { //Superlinear growth
+						effects["faithMax"] = (3 * Math.pow(tt, 1.5)) + 5.13167019;
+					} else { //Set a reasonable limit
+						effects["faithMax"] = 3000;
+					}
 				}
 			}
 			self.effects = effects;
