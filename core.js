@@ -851,7 +851,8 @@ dojo.declare("com.nuclearunicorn.game.ui.Button", com.nuclearunicorn.core.Contro
 			style: {
 				position: "relative",
 				display: this.model.visible ? "block" : "none"
-			}
+			},
+			tabIndex: 0
 		}, btnContainer);
 
 		if (this.model.twoRow) {
@@ -879,6 +880,7 @@ dojo.declare("com.nuclearunicorn.game.ui.Button", com.nuclearunicorn.core.Contro
 		this.updateVisible();
 
 		dojo.connect(this.domNode, "onclick", this, "onClick");
+		dojo.connect(this.domNode, "onkeypress", this, "onKeyPress");
 
 		this.afterRender();
 	},
@@ -904,6 +906,12 @@ dojo.declare("com.nuclearunicorn.game.ui.Button", com.nuclearunicorn.core.Contro
 			}
 		});
 
+	},
+
+	onKeyPress: function(event){
+		if (event.key == "Enter"){
+			this.onClick(event);
+		}
 	},
 
 	afterRender: function(){
@@ -1275,12 +1283,12 @@ ButtonModernHelper = {
 
 		// description
 		var descDiv = dojo.create("div", {
-			innerHTML: model.description,
+			innerHTML: controller.getDescription(model),
 			className: "desc"
 		}, tooltip);
 
 
-		if (model.metadata && model.metadata.isAutomationEnabled !== undefined){	//TODO: use proper metadata flag
+		if (model.metadata && typeof(model.metadata.isAutomationEnabled) == "boolean"){ //undefined or null don't count here
 			dojo.create("div", {
 				innerHTML: model.metadata.isAutomationEnabled ? $I("btn.aon.tooltip") : $I("btn.aoff.tooltip"),
 				className: "desc small" + (model.metadata.isAutomationEnabled ? " auto-on" : " auto-off")
@@ -1461,6 +1469,10 @@ dojo.declare("com.nuclearunicorn.game.ui.ButtonModern", com.nuclearunicorn.game.
 
 	updateLink: function(buttonLink, modelLink) {
 		if (buttonLink) {
+			if (!modelLink) { //This only ever happens if I mess around with console commands
+				dojo.destroy(buttonLink.link);
+				return;
+			}
 			buttonLink.link.textContent = modelLink.title;
 			if (modelLink.cssClass) {buttonLink.link.className = modelLink.cssClass;}
 			if (modelLink.tooltip) {buttonLink.link.title = modelLink.tooltip;}
@@ -1499,7 +1511,7 @@ dojo.declare("com.nuclearunicorn.game.ui.BuildingBtnController", com.nuclearunic
 				}
 			};
 		}
-		if (typeof(model.metadata.isAutomationEnabled) != "undefined" && model.metadata.isAutomationEnabled !== null) {
+		if (typeof(model.metadata.isAutomationEnabled) == "boolean") {
 			model.toggleAutomationLink = {
 				title: model.metadata.isAutomationEnabled ? "A" : "*",
 				tooltip: model.metadata.isAutomationEnabled ? $I("btn.aon.tooltip") : $I("btn.aoff.tooltip"),
@@ -1566,8 +1578,14 @@ dojo.declare("com.nuclearunicorn.game.ui.BuildingBtnController", com.nuclearunic
 		return false;
 	},
 
+	//Called whenever we turn the building on or off.
+	//The function was previously empty, so I repurposed it for possible non-proportional calculations.
 	metadataHasChanged: function(model) {
-		// do nothing
+		var meta = model.metadata;
+		if (meta.calculateEffects){
+			meta.calculateEffects(meta, this.game);
+			this.game.calendar.cycleEffectsBasics(meta.effects, meta.name); //(Only relevant for space buildings)
+		}
 	},
 
 	off: function(model, amt) {
@@ -1835,8 +1853,12 @@ dojo.declare("com.nuclearunicorn.game.ui.BuildingBtn", com.nuclearunicorn.game.u
 		}
 
 		var building = this.model.metadata;
-		if (building && building.val){
-
+		if (!building) {
+			//Everything else we want to do here depends on the building property.
+			//If we don't have that, then skip
+			return;
+		}
+		if (building.val){
 			// -------------- sell ----------------
 			if (this.sellHref){
 				dojo.style(this.sellHref.link, "display", (building.val > 0) ? "" : "none");
@@ -1861,10 +1883,10 @@ dojo.declare("com.nuclearunicorn.game.ui.BuildingBtn", com.nuclearunicorn.game.u
 			if (this.add) {
 				dojo.toggleClass(this.add["add1"].link, "enabled", building.on < building.val);
 			}
-
 			this.updateLink(this.toggle, this.model.togglableOnOffLink);
-			this.updateLink(this.toggleAutomation, this.model.toggleAutomationLink);
 		}
+		//Update this specific link even if there are 0 of the building in question:
+		this.updateLink(this.toggleAutomation, this.model.toggleAutomationLink);
 	}
 });
 
@@ -2256,6 +2278,7 @@ dojo.declare("com.nuclearunicorn.game.ui.Panel", [com.nuclearunicorn.game.ui.Con
 
 		this.toggle = dojo.create("div", {
 			innerHTML: this.collapsed ? "+" : "-",
+			tabIndex: 0,
 			className: "toggle" + (this.collapsed ? " collapsed" : ""),
 			style: {
 				float: "right"
@@ -2277,6 +2300,7 @@ dojo.declare("com.nuclearunicorn.game.ui.Panel", [com.nuclearunicorn.game.ui.Con
 		dojo.connect(this.toggle, "onclick", this, function(){
 			this.collapse(!this.collapsed);
 		});
+		dojo.connect(this.toggle, "onkeypress", this, "onKeyPress");
 
 		this.panelDiv = panel;
 
@@ -2286,6 +2310,13 @@ dojo.declare("com.nuclearunicorn.game.ui.Panel", [com.nuclearunicorn.game.ui.Con
 		this.inherited(arguments, [this.contentDiv] /* dojo majic */);
 
 		return this.contentDiv;
+	},
+
+
+	onKeyPress: function(event){
+		if (event.key == "Enter"){
+			this.collapse(!this.collapsed);
+		}
 	},
 
 	collapse: function(isCollapsed){

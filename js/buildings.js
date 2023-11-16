@@ -836,15 +836,21 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 	
 				stageMeta.effects = game.resPool.addBarnWarehouseRatio(effects);
             } else if (self.stage == 1){
-                var effects = {
-					"moonBaseStorageBonus": 0.01,
-					"planetCrackerStorageBonus": 0.01 ,
-					"cryostationStorageBonus": 0.01,
-					"energyConsumption": 40	
-                };
+			var effects = {
+					"moonBaseStorageBonus": 0.0085,
+					"planetCrackerStorageBonus": 0.0085,
+					"cryostationStorageBonus": 0.0085,
+					"energyConsumption": 5
+			};
+			if(self.on >= 10) {
+				//The first 10 Spaceports each cost 5Wt to run.
+				//The 11th Spaceport costs 6Wt to run.
+				//The 12th Spaceport costs 7Wt to run.
+				//etc.
+				effects[ "energyConsumption" ] = 0.5 * (self.on - 9) + 45 / self.on;
+			}
                 stageMeta.effects = effects;
             }
-			
 		},
 		upgrades: {
 			spaceBuilding: ["moonBase", "planetCracker", "cryostation"]
@@ -1107,8 +1113,12 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 			self.effects["steelPerTickProd"] = 0;
 
 			var steelRatio = game.getEffect("calcinerSteelRatio");
-			if (steelRatio != 0){
-
+			if (steelRatio == 0) {
+				self.description = $I("buildings.calciner.desc");
+				self.isAutomationEnabled = null;
+			} else {
+				self.description = $I("buildings.calciner.desc") + "<br>" +
+					$I("buildings.calciner.desc.automation", [(100 * steelRatio).toFixed()]);
 				if (self.isAutomationEnabled == null) {
 					self.isAutomationEnabled = true;
 				}
@@ -1215,17 +1225,28 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 				}
 			}
 			self.effects["manuscriptPerTickProd"] = amt;
+
+			//Update description to explain what automation does:
+			if (game.workshop.get("factoryAutomation").researched) {
+				self.description = $I("buildings.steamworks.desc") + "<br>" + $I("buildings.steamworks.desc.automation");
+			} else {
+				self.description = $I("buildings.steamworks.desc");
+			}
 		},
 		jammed: false,
 		togglableOnOff: true,
 		isAutomationEnabled: null,
 		action: function(self, game) {
-			if (self.on < 1 || self.jammed || !game.workshop.get("factoryAutomation").researched) {
+			if (game.workshop.get("factoryAutomation").researched) {
+				if (self.isAutomationEnabled == null) { //force non-null value
+					self.isAutomationEnabled = true;
+				}
+			} else {
+				self.isAutomationEnabled = null;
 				return;
 			}
-
-			if (self.isAutomationEnabled == null) {
-				self.isAutomationEnabled = true;
+			if (self.on < 1 || self.jammed) {
+				return;
 			}
 
 			var wood = game.resPool.get("wood");
@@ -1340,10 +1361,18 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		},
 		isAutomationEnabled: null,
 		calculateEffects: function(self, game) {
+			//The upgrade that optionally increases oil prod at the cost of energy:
 			var hasPumpjack = game.workshop.get("pumpjack").researched;
 			self.togglable = hasPumpjack;
-			if (self.isAutomationEnabled == null && hasPumpjack) {
-				self.isAutomationEnabled = true;
+
+			if (hasPumpjack) {
+				self.description = $I("buildings.oilWell.desc") + "<br>" + $I("buildings.oilWell.desc.automation");
+				if (self.isAutomationEnabled == null) { //force non-null value
+					self.isAutomationEnabled = true;
+				}
+			} else {
+				self.description = $I("buildings.oilWell.desc");
+				self.isAutomationEnabled = null;
 			}
 
 			var oilRatio = 1 + game.getEffect("oilWellRatio");
@@ -1422,8 +1451,10 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 
 			effects["energyConsumption"] = 2;
 			if(game.workshop.get("carbonSequestration").researched){
+				self.description = $I("buildings.factory.desc") + "<br>" + $I("buildings.factory.desc.automation");
 				self.isAutomationEnabled = (self.isAutomationEnabled === null) ? true : self.isAutomationEnabled;
 			} else {
+				self.description = $I("buildings.factory.desc");
 				self.isAutomationEnabled = null;
 			}
 			effects["energyConsumption"] *= (self.isAutomationEnabled)? 2 : 1;
@@ -1455,8 +1486,14 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		isAutomationEnabled: null,
 		calculateEffects: function(self, game) {
 			self.effects["uraniumPerTick"] = -0.001 * (1 - game.getEffect("uraniumRatio"));
-			if (self.isAutomationEnabled == null && game.workshop.get("thoriumReactors").researched) {
-				self.isAutomationEnabled = true;
+			if (game.workshop.get("thoriumReactors").researched) {
+				self.description = $I("buildings.reactor.desc") + "<br>" + $I("buildings.reactor.desc.automation");
+				if (self.isAutomationEnabled == null ) {
+					self.isAutomationEnabled = true; //force non-null value
+				}
+			} else {
+				self.description = $I("buildings.reactor.desc");
+				self.isAutomationEnabled = null;
 			}
 		},
 		action: function(self, game) {
@@ -2325,7 +2362,7 @@ dojo.declare("classes.managers.BuildingsManager", com.nuclearunicorn.core.TabMan
 		if (bld.get("name") == "warehouse" && bld.get("stage") == 1){
 			for (var i = 0; i < prices.length; i++) {
 				if (prices[i].name == "starchart"){
-					prices[i].val = prices[i].val * Math.pow(1.6, bld.get("val"));
+					prices[i].val = prices[i].val * Math.pow(1.35, bld.get("val"));
 				}
 			}
 		}
@@ -2886,6 +2923,9 @@ dojo.declare("classes.ui.btn.BuildingBtnModernController", com.nuclearunicorn.ga
 
     build: function(model, opts){
 		var counter = this.inherited(arguments);
+		if (!counter) {
+			return; //Skip stats & undo if nothing was built
+		}
 
 		//update stats
 		this.game.stats.getStat("buildingsConstructed").val += counter;
